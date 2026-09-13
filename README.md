@@ -357,7 +357,7 @@ drafting aid, not a trusted source - it never runs unreviewed code, and the
 harness only calls a decoder entry point, never shell, network or exec.
 
 ```sh
-ollama run qwen3:1.7b <<'PROMPT'
+ollama run qwen3:1.7b --think=false <<'PROMPT'
 Draft a libFuzzer harness (LLVMFuzzerTestOneInput) in C for this function:
 
   int inspect_png(const uint8_t *data, size_t size, int fixed,
@@ -369,6 +369,15 @@ libraries beyond <stddef.h> and <stdint.h>.
 PROMPT
 ```
 
+![img](./screenshots/2026-09-13_19-44.png)     
+
+![img](./screenshots/2026-09-13_19-45.png)     
+
+`--think=false` matters here: without it qwen3 narrates a long, often
+confused chain of thought before ever reaching code (it visibly second
+guesses what `out`/`capacity` are for) - the same latency/verbosity problem
+`tools/ai_mutate.py` works around by sending `"think": false` to the API.
+
 ![img](./screenshots/2026-09-13_19-38.png)     
 
 ![img](./screenshots/2026-09-13_19-39.png)     
@@ -379,18 +388,22 @@ prompt didn't ask for slipped in (file I/O, `system()`, network), and confirm
 the size bounds match what the parser itself expects. The reviewed harness
 is checked in; build and run it exactly like the vendored ones:
 
-```sh
+```bash
 ./tools/build_purrview_png_fuzzer.sh app/src/main/assets/purrview-oob.png
 ```
+
+![img](./screenshots/2026-09-13_19-49.png)     
 
 That single-fixture run reports the same heap-buffer-overflow the Android
 `:png_decoder` worker hits, straight from AddressSanitizer. Drop the fixture
 argument to run a short standalone campaign instead (`libFuzzer` mutates its
 own corpus and writes any crash it finds to `./crash-*`):
 
-```sh
+```bash
 MAX_TOTAL_TIME=30 ./tools/build_purrview_png_fuzzer.sh
 ```
+
+![img](./screenshots/2026-09-13_19-50.png)     
 
 A minute of local mutation from the one-fixture seed corpus is enough to
 rediscover the same overflow without being told where it is.
