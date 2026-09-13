@@ -69,12 +69,14 @@ address, pid and process name - the same class of operation as `pmap` or
 Android Studio's profiler.
 
 Run it against the live device and it will find exactly the same base the
-self-check button reports:
+self-check button reports:     
 
-```sh
+```bash
 "$ADB_BIN" shell am start -n lab.purrview/.MainActivity
 ADB_BIN="$ADB_BIN" python3 tools/aslr_oracle.py --serial ZY22K5H4KQ --log
 ```
+
+![img](./screenshots/2026-09-13_19-24.png)    
 
 Tap **ASLR self-check** and compare its `base=` value in logcat (tag
 `PurrView/ASLR`) against the oracle's `base=` - they match, because both are
@@ -98,6 +100,14 @@ bug without touching a user's messages.
 
 ## Reproduce on the Motorola
 
+Run on my Parrot Security OS:     
+
+```bash
+adb devices -l
+```
+
+![img](./screenshots/2026-09-13_18-14.png)     
+
 Generate the deterministic fixtures (the command is optional because they are
 already in the APK assets):
 
@@ -118,30 +128,41 @@ ADB_BIN=/home/cocomelonc/Android/Sdk/platform-tools/adb
 
 Start the evidence stream before tapping a button:
 
-```sh
+```bash
 "$ADB_BIN" logcat -c
 "$ADB_BIN" logcat -v threadtime -s \
   'PurrView/PNG:I' 'PurrView/SMS:I' 'PurrView/ASLR:I' \
   'PurrView/WebP:I' 'PurrView/JPEG:I' 'libc:F' 'DEBUG:F' '*:S'
 ```
 
-For the strongest sequence, tap **PNG -> Run fixed**, **PNG -> Run PoC**, then
-**ASLR self-check**, then **SMS PDU PoC**. The expected SMS lines are similar
-to:
+![img](./screenshots/2026-09-13_18-17.png)     
 
-```text
-I/PurrView/SMS: PDU header | version=1 declared=256 available=256 mode=PoC
-E/PurrView/SMS: OOB WRITE | PurrView PDU parser | allocation=1 copy=256 source=256
-E/PurrView/SMS: memcpy(dst=..., src=..., len=256) about to cross allocation boundary
-E/PurrView/SMS: OOB WRITE completed | aborting SMS worker before corrupted heap is reused
-F/libc: Fatal signal 6 (SIGABRT) ... :sms_decoder
-```
+![img](./screenshots/2026-09-13_18-19.png)          
+
+For the strongest sequence, tap *PNG -> Run fixed*:     
+
+![img](./screenshots/2026-09-13_18-22.png)    
+
+*PNG -> Run PoC*:    
+
+![img](./screenshots/2026-09-13_19-01.png)     
+
+then
+
+*ASLR self-check*:    
+
+![img](./screenshots/2026-09-13_19-02.png)     
+
+then *SMS PDU PoC*. 
+The expected SMS lines are similar to:    
+
+![img](./screenshots/2026-09-13_19-03.png)    
 
 The PNG PoC has the same shape with `allocation=1`, `copy=65536` and
 `:png_decoder`. A native fault in either worker is expected for the PoC and
 does not terminate the visible activity.
 
-## Server-side mutation demo
+## server-side mutation demo
 
 `tools/ai_mutate.py` is the missing AI layer for the talk. It is a laptop-side
 controller, not an APK feature: Ollama chooses one recipe from a tiny
@@ -153,12 +174,16 @@ does not depend on conference Wi-Fi.
 
 Generate a visibly different PNG and print its recipe, SHA-256 and byte diff:
 
-```sh
+```bash
 cd ~/research/purrview
 python3 tools/ai_mutate.py --kind png --target oob \
   --profile '{"device":"Motorola","arch":"arm64","stage":"MCTTP 2026"}' \
   --output build/ai-mutation/purrview-ai.png
 ```
+
+![img](./screenshots/2026-09-13_19-05.png)    
+
+![img](./screenshots/2026-09-13_19-06.png)    
 
 By default the script tries three sources in order and records which one
 answered in the manifest's `source` field:
@@ -176,45 +201,115 @@ answered in the manifest's `source` field:
 A cold model load can take up to a minute on either host, which is why
 `--timeout` defaults to 60s. Useful overrides:
 
-```sh
-# Skip the remote host entirely (e.g. off that network) and go straight to local:
+```bash
+# skip the remote host entirely (e.g. off that network) and go straight to local:
 python3 tools/ai_mutate.py --kind png --target oob --no-remote
 
-# Point at a different rehearsal host or model:
+# point at a different rehearsal host or model:
 python3 tools/ai_mutate.py --kind png --target oob \
   --remote-ssh user@10.0.0.5 --remote-model qwen3-coder:30b
 ```
+
+![img](./screenshots/2026-09-13_19-07.png)     
 
 Add `--offline` to skip Ollama entirely - this is what stage runs should use,
 since it is not required and adds cold-start latency. The optional PDU
 variant is:
 
-```sh
+```bash
 python3 tools/ai_mutate.py --offline --kind pdu --target oob \
   --output build/ai-mutation/purrview-ai.bin
 ```
+
+![img](./screenshots/2026-09-13_19-08.png)     
 
 With a USB-authorised debug phone, copy the generated PNG into PurrView's
 private directory (the script never writes another app's files):
 
 ```sh
-ADB_BIN=/home/cocomelonc/Android/Sdk/platform-tools/adb \
-python3 tools/ai_mutate.py --offline --kind png --target oob \
-  --output build/ai-mutation/purrview-ai.png --adb-push --serial ZY22K5H4KQ
+ADB_BIN=/home/cocomelonc/Android/Sdk/platform-tools/adb python3 tools/ai_mutate.py --offline --kind png --target oob --output build/ai-mutation/purrview-ai.png --adb-push --serial ZY22K5H4KQ
 ```
 
-Then press **PNG -> Run AI PoC**. The worker accepts only the fixed filename
+(Deliberately one line: a trailing `\` line-continuation can get eaten by
+some terminals/paste handling, leaving `ADB_BIN=...` and the next line to run
+as two separate commands - which fails with something like `adb: unknown
+command python3`. If that happens, retype it as a single line.)
+
+![img](./screenshots/2026-09-13_19-13.png)    
+
+![img](./screenshots/2026-09-13_19-13_1.png)    
+
+Then press *PNG -> Run AI PoC*. The worker accepts only the fixed filename
 `files/purrview-ai.png`, logs the new input and follows the same isolated
-`:png_decoder` path. The presentation flow is therefore:
+`:png_decoder` path. The presentation flow is therefore:    
 
-```text
-device profile -> bounded JSON recipe -> deterministic fixture + diff -> adb push
--> PurrView Run AI PoC -> OOB WRITE in :png_decoder
-```
+![img](./screenshots/2026-09-13_19-14.png)    
 
 The model selects a parser-test recipe; it does not generate an exploit or
 execute anything. `build/ai-mutation/purrview-ai.png.json` is a machine-readable
 record suitable for putting beside the slide or using as a fallback manifest.
+
+### live sweep: AI searching against the real device
+
+`--sweep N` turns the single fixture above into a repeated, on-device search:
+Ollama proposes N recipes in a row (varying seed/temperature and told which
+recipes it already tried, so it does not just repeat itself), and each one is
+actually pushed, triggered and classified against the phone - not simulated,
+not scored in a host harness. This is the strongest available demonstration
+of an AI-driven search hitting a real crash on real hardware: no target is
+forced, so `--sweep-target any` (the default) lets Ollama land on either a
+safely-handled recipe or the parser's integer-narrowing bypass, and the
+outcome is read back live from the device's own logcat, not predicted ahead
+of time.
+
+```bash
+python3 tools/ai_mutate.py --sweep 8 --no-remote \
+  --profile '{"device":"Motorola","arch":"arm64","stage":"MCTTP 2026"}' \
+  --serial ZY22K5H4KQ
+```
+
+![img](./screenshots/2026-09-13_19-15.png)     
+
+![img](./screenshots/2026-09-13_19-16.png)     
+
+![img](./screenshots/2026-09-13_19-17.png)     
+
+`--no-remote` is the recommended default for the actual stage run: the
+remote rehearsal host (`qwen3:14b` over SSH) is fine to rehearse against on a
+known network, but on conference Wi-Fi it is one more thing that can stall -
+and unlike the single fixture flow, a sweep pays that stall N times in a
+row, once per iteration. `qwen3:1.7b` running locally is slower per call
+(roughly 20-30s, since it "thinks" through the JSON before answering) but
+consistent, which matters more than raw speed for a live sweep. Drop
+`--no-remote` only when rehearsing on the same network as the remote host.
+
+Each iteration prints its recipe, the classified outcome and a running
+tally, e.g.:
+
+![img](./screenshots/2026-09-13_19-20.png)     
+
+Bring `lab.purrview/.MainActivity` to the foreground first (`am start -n
+lab.purrview/.MainActivity`) - the trigger relies on the app already being
+visible, exactly like tapping a button does. Every artifact from the run
+(each pushed PNG, its per-iteration manifest and a `summary.json`) lands
+under a timestamped `build/ai-mutation/sweep/<run>/` directory, so a sweep
+can be replayed on a slide afterwards even without the phone on stage.
+`--sweep-delay` (default 1.5s) paces iterations for a live audience;
+`--sweep-timeout` (default 4s) is how long one iteration waits for logcat
+before it is counted as `TIMEOUT`; `--offline` skips Ollama and cycles a
+deterministic recipe instead, for a rehearsal without conference Wi-Fi.
+
+The trigger itself is `AiSweepReceiver`, a minimal exported broadcast
+receiver added specifically for this harness
+(`app/src/main/java/lab/purrview/AiSweepReceiver.java`). It reads nothing
+from the incoming broadcast - it always starts `PngDecodeService` against
+PurrView's own already-private `files/purrview-ai.png`, the same fixed path
+the "Run AI PoC" button already used - and it no-ops unless the installed
+build is itself debuggable, so it does not widen the app's exposure beyond
+the same debug-device trust level the rest of this lab already assumes.
+Every other decoder service stays `exported="false"`; this is the one
+deliberate, bounded exception, made so the sweep can drive the phone from
+adb without a human tapping a button between recipes.
 
 Check worker isolation without root:
 
@@ -224,15 +319,28 @@ Check worker isolation without root:
 
 Remove the app normally with `"$ADB_BIN" uninstall lab.purrview`.
 
-## Host-side sanitizer evidence
+## host-side sanitizer evidence
 
 The host harnesses keep sanitizer traces readable and do not contact the
 network:
 
-```sh
+```bash
 ./tools/build_webp_fuzzer.sh app/src/main/assets/bad.webp
+```
+
+![img](./screenshots/2026-09-13_19-34.png)     
+
+![img](./screenshots/2026-09-13_19-35.png)     
+
+```bash
 ./tools/build_jpeg_fuzzer.sh app/src/main/assets/poc.pgm
 ```
+
+![img](./screenshots/2026-09-13_19-36.png)    
+
+![img](./screenshots/2026-09-13_19-36_1.png)    
+
+![img](./screenshots/2026-09-13_19-37.png)     
 
 The WebP run uses the vendored 1.3.1 tree and reports the historical
 heap-buffer-overflow in `ReplicateValue`; the JPEG run exercises the 2.0.4
@@ -260,6 +368,10 @@ sizes outside 8..1048576 before calling. No file I/O, no network, no other
 libraries beyond <stddef.h> and <stdint.h>.
 PROMPT
 ```
+
+![img](./screenshots/2026-09-13_19-38.png)     
+
+![img](./screenshots/2026-09-13_19-39.png)     
 
 The draft needs the same review any generated code gets here: confirm the
 signature and header match `parser.h` exactly, confirm no capability the
@@ -309,7 +421,8 @@ logging has a stderr fallback so those tests remain portable.
 - `app/src/main/cpp/png_jni.c`, `sms_jni.c` - bounded JNI entry points.
 - `app/src/main/cpp/jpeg_bridge.c`, `webp_bridge.c` - native codec bridges.
 - `tools/generate_samples.py` - deterministic `purrview-oob.png` and `purrview-pdu.bin` generation.
-- `tools/ai_mutate.py` - bounded Ollama/fallback recipe selection, deterministic fixture builder, diff manifest and optional `adb push`.
+- `tools/ai_mutate.py` - bounded Ollama/fallback recipe selection, deterministic fixture builder, diff manifest and optional `adb push`; `--sweep N` drives N live recipes against a real device via `AiSweepReceiver` and classifies each from logcat.
+- `app/src/main/java/lab/purrview/AiSweepReceiver.java` - the one deliberate, bounded exported component, added so `--sweep` can trigger `PngDecodeService` from adb with no human tapping a button between recipes.
 - `tools/fuzz_purrview_png.c`, `build_purrview_png_fuzzer.sh` - libFuzzer/ASan harness for `parser.c`'s `inspect_png`, drafted with local Ollama and reviewed by hand.
 - `tools/aslr_oracle.py` - external `/proc`-based reader of PurrView's own real, running-process ASLR base (via `adb ... run-as`), cross-checked against the on-device self-check; `--simulate` keeps the old offline toy search for rehearsal without hardware.
 

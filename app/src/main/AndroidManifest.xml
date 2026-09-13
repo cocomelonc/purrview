@@ -19,5 +19,13 @@
       android:process=":sms_decoder"
       android:exported="false"
       android:stopWithTask="true" />
+  <!-- Bounded, demo-only trigger for tools/ai_mutate.py sweep mode: no data
+       from the incoming broadcast is used, it only starts PngDecodeService
+       against PurrView's own already-private files/purrview-ai.png, and it is
+       a no-op unless the installed build is itself debuggable (see
+       AiSweepReceiver). -->
+  <receiver android:name=".AiSweepReceiver" android:exported="true">
+   <intent-filter><action android:name="lab.purrview.action.AI_SWEEP_START"/></intent-filter>
+  </receiver>
  </application>
 </manifest>

@@ -22,6 +22,7 @@ import contextlib
 import hashlib
 import json
 import os
+import re
 import socket
 import struct
 import subprocess
@@ -48,6 +49,14 @@ DEFAULT_LOCAL_ENDPOINT = "http://127.0.0.1:11434"
 DEFAULT_LOCAL_MODEL = "qwen3:1.7b"
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 MAX_FIXTURE = 128 * 1024
+SWEEP_ACTION = "lab.purrview.action.AI_SWEEP_START"
+SWEEP_RECEIVER = "lab.purrview/.AiSweepReceiver"
+SWEEP_OUTCOME_PATTERNS = (
+    (re.compile(r"OOB WRITE \| PurrView parser"), "OOB_WRITE"),
+    (re.compile(r"native result: ACCEPTED"), "CONTROL"),
+    (re.compile(r"native result: REJECTED"), "REJECTED"),
+    (re.compile(r"fixture rejected:"), "REJECTED"),
+)
 
 # These values are deliberately small.  They are enough to exercise the
 # PurrView parser's integer-narrowing paths without becoming a general fuzzer.
@@ -248,18 +257,26 @@ def parse_json_object(text: str) -> Mapping[str, Any]:
     return value
 
 
-def prompt_for(kind: str, target: str, profile: Mapping[str, Any]) -> str:
+def prompt_for(kind: str, target: str, profile: Mapping[str, Any], extra: str = "") -> str:
     schema = (
         '{"kind":"png","width":128,"height":128,"channels":4,'
         '"bit_depth":8,"pattern":"affine","seed":3,"crc":"valid"}'
         if kind == "png"
         else '{"kind":"pdu","declared_length":256,"pattern":"affine","seed":11}'
     )
+    if target == "any":
+        target_instruction = (
+            "Pick any single bounded recipe from the allow-list below for "
+            f"parser kind={kind!r}; both a safely-handled combination and one "
+            "that hits the parser's integer-narrowing bypass are valid answers."
+        )
+    else:
+        target_instruction = f"Choose target={target!r} for parser kind={kind!r}."
     return (
         "You are a bounded test-case planner for the offline PurrView Android "
         "memory-safety lab. Return JSON only, matching this schema exactly: "
         f"{schema} "
-        f"Choose target={target!r} for parser kind={kind!r}. "
+        f"{target_instruction} "
         "The allow-list is the only authority: PNG dimensions are "
         "64x64, 128x64, 128x128, or 256x64; channels=4; bit_depth=8; "
         "PDU lengths are 32, 128, 256, 512, or 1024; patterns are "
@@ -267,10 +284,18 @@ def prompt_for(kind: str, target: str, profile: Mapping[str, Any]) -> str:
         "Do not output C, assembly, shellcode, ROP, syscalls, commands, "
         "URLs, file paths, network actions, or executable content. "
         f"Device profile (informational only): {json.dumps(profile, sort_keys=True)}"
+        f"{extra}"
     )
 
 
-def call_ollama(endpoint: str, model: str, prompt: str, timeout: float) -> Mapping[str, Any]:
+def call_ollama(
+    endpoint: str,
+    model: str,
+    prompt: str,
+    timeout: float,
+    temperature: float = 0,
+    seed: int = 42,
+) -> Mapping[str, Any]:
     body = {
         "model": model,
         "messages": [
@@ -279,7 +304,11 @@ def call_ollama(endpoint: str, model: str, prompt: str, timeout: float) -> Mappi
         ],
         "stream": False,
         "format": "json",
-        "options": {"temperature": 0, "seed": 42},
+        # Reasoning models (qwen3) otherwise spend 60-80s narrating a chain of
+        # thought before the JSON; the recipe schema needs none of that, and
+        # skipping it is what keeps a call comfortably inside --timeout.
+        "think": False,
+        "options": {"temperature": temperature, "seed": seed},
     }
     request = urllib.request.Request(
         endpoint.rstrip("/") + "/api/chat",
@@ -364,9 +393,12 @@ def resolve_recipe(
     target: str,
     profile: Mapping[str, Any],
     args: argparse.Namespace,
+    extra_prompt: str = "",
+    ollama_seed: int = 42,
+    temperature: float = 0,
 ) -> tuple[Mapping[str, Any] | None, str, str | None]:
     """Try the remote Ollama over SSH, then local Ollama, in that order."""
-    prompt = prompt_for(kind, target, profile)
+    prompt = prompt_for(kind, target, profile, extra_prompt)
     stages: list[tuple[str, str]] = []
     if not args.no_remote:
         stages.append(("ollama-remote", args.remote_model))
@@ -377,9 +409,15 @@ def resolve_recipe(
             if source == "ollama-remote":
                 bind_host = args.remote_bind_host or default_remote_bind_host(args.remote_ssh)
                 with ssh_tunnel(args.remote_ssh, bind_host, args.remote_port, args.tunnel_port, args.ssh_timeout):
-                    raw = call_ollama(f"http://127.0.0.1:{args.tunnel_port}", model, prompt, args.timeout)
+                    raw = call_ollama(
+                        f"http://127.0.0.1:{args.tunnel_port}", model, prompt, args.timeout,
+                        temperature=temperature, seed=ollama_seed,
+                    )
             else:
-                raw = call_ollama(args.local_endpoint, model, prompt, args.timeout)
+                raw = call_ollama(
+                    args.local_endpoint, model, prompt, args.timeout,
+                    temperature=temperature, seed=ollama_seed,
+                )
             recipe = validate_recipe(raw, kind, target)
             return recipe, source, model
         except (RuntimeError, RecipeError) as error:
@@ -429,6 +467,165 @@ def push_to_device(path: Path, serial: str | None, private_name: str) -> None:
     subprocess.run(command + ["shell", "rm", target], check=True)
 
 
+def trigger_sweep_worker(serial: str | None) -> None:
+    """Fire the bounded AiSweepReceiver broadcast; equivalent to tapping Run AI PoC."""
+    adb = os.environ.get("ADB_BIN", "adb")
+    command = [adb]
+    if serial:
+        command += ["-s", serial]
+    command += ["shell", "am", "broadcast", "-a", SWEEP_ACTION, "-n", SWEEP_RECEIVER]
+    subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+
+
+def sweep_logcat_command(serial: str | None) -> list[str]:
+    adb = os.environ.get("ADB_BIN", "adb")
+    # A single "TAG:I" entry is deliberate: logcat's filterspec keeps only one
+    # priority per tag, and I is the lowest (most inclusive) level PurrView's
+    # native code logs at, so it alone passes I/W/E/F lines for this tag.
+    # Listing the same tag more than once at different levels silently drops
+    # all but one of them instead of merging - that previously hid every
+    # INFO-level "native result: ACCEPTED" line behind an effective E-only
+    # filter.
+    return [adb] + (["-s", serial] if serial else []) + [
+        "logcat", "-d", "-v", "brief", "-s", "PurrView/PNG:I", "*:S",
+    ]
+
+
+def clear_sweep_log(serial: str | None) -> None:
+    adb = os.environ.get("ADB_BIN", "adb")
+    command = [adb] + (["-s", serial] if serial else []) + ["logcat", "-c"]
+    subprocess.run(command, check=True)
+
+
+def poll_sweep_outcome(serial: str | None, timeout: float, poll_interval: float = 0.25) -> tuple[str, str | None]:
+    """Classify one sweep iteration by repeatedly dump-snapshotting logcat.
+
+    A device crash never returns from decodePng() (the native call raises
+    SIGABRT before the JNI boundary is unwound), so the OOB_WRITE marker is
+    matched from the PNG_LOGE line that precedes the abort, not from a result
+    line - there is none for that path. A dump-and-exit snapshot (``-d``) is
+    used instead of a persistent streamed ``adb logcat`` process because adb
+    fully buffers its own stdout when it is not a terminal, so a handful of
+    lines can sit unflushed in a pipe well past any reasonable per-iteration
+    timeout; each snapshot always flushes on exit.
+    """
+    command = sweep_logcat_command(serial)
+    deadline = time.monotonic() + timeout
+    while True:
+        result = subprocess.run(command, capture_output=True, text=True, check=False)
+        for line in result.stdout.splitlines():
+            for pattern, outcome in SWEEP_OUTCOME_PATTERNS:
+                if pattern.search(line):
+                    return outcome, line.strip()
+        if time.monotonic() >= deadline:
+            return "TIMEOUT", None
+        time.sleep(poll_interval)
+
+
+def run_sweep(args: argparse.Namespace) -> int:
+    if args.kind != "png":
+        print("[ai_mutate] --sweep currently supports --kind png only (matches AiSweepReceiver)", file=sys.stderr)
+        return 2
+    try:
+        profile = parse_profile(args.profile)
+    except (OSError, json.JSONDecodeError, ValueError) as error:
+        print(f"[ai_mutate] invalid --profile: {error}", file=sys.stderr)
+        return 2
+
+    sweep_dir = DEFAULT_OUTPUT / "sweep" / time.strftime("%Y%m%d-%H%M%S")
+    sweep_dir.mkdir(parents=True, exist_ok=True)
+    print(f"[ai_mutate] sweep of {args.sweep} live recipe(s) against a real device; "
+          f"artifacts under {sweep_dir}")
+
+    tally: dict[str, int] = {"CONTROL": 0, "OOB_WRITE": 0, "REJECTED": 0, "TIMEOUT": 0}
+    history: list[dict[str, Any]] = []
+    previous_data: bytes | None = None
+    interrupted = False
+    try:
+        for i in range(1, args.sweep + 1):
+            avoid = ""
+            if history:
+                recent = [entry["recipe"] for entry in history[-5:]]
+                avoid = (" Earlier recipes already tried this sweep, avoid repeating any of "
+                         f"them exactly: {json.dumps(recent, sort_keys=True)}")
+
+            recipe: Mapping[str, Any] | None = None
+            source = "deterministic-fallback"
+            model_used: str | None = None
+            if not args.offline:
+                recipe, source, model_used = resolve_recipe(
+                    "png", args.sweep_target, profile, args,
+                    extra_prompt=avoid, ollama_seed=1000 + i, temperature=0.9,
+                )
+            if recipe is None:
+                base = dict(fallback_recipe("png", "oob" if args.sweep_target == "oob" else "control"))
+                base["seed"] = (base["seed"] + i) & 0xFF
+                recipe = validate_recipe(base, "png", args.sweep_target)
+                source = "deterministic-fallback"
+                model_used = None
+
+            data = build_png(recipe)
+            if previous_data is not None and data == previous_data:
+                try:
+                    varied = validate_recipe(force_visible_variation(recipe, "png"), "png", args.sweep_target)
+                    varied_data = build_png(varied)
+                    if varied_data != data:
+                        recipe, data = varied, varied_data
+                        source += "+guarded-variation"
+                except RecipeError:
+                    pass
+
+            fixture_path = sweep_dir / f"{i:03d}.png"
+            fixture_path.write_bytes(data)
+            expected = expected_outcome(recipe)
+
+            try:
+                clear_sweep_log(args.serial)
+                push_to_device(fixture_path, args.serial, "purrview-ai.png")
+                trigger_sweep_worker(args.serial)
+                outcome, evidence = poll_sweep_outcome(args.serial, args.sweep_timeout)
+            except (OSError, subprocess.CalledProcessError) as error:
+                outcome, evidence = "TIMEOUT", f"adb error: {error}"
+
+            tally[outcome] = tally.get(outcome, 0) + 1
+            entry = {
+                "iteration": i,
+                "source": source,
+                "model": model_used,
+                "recipe": recipe,
+                "expected": expected,
+                "outcome": outcome,
+                "evidence": evidence,
+                "fixture": {"path": str(fixture_path.resolve()), "sha256": hashlib.sha256(data).hexdigest()},
+            }
+            history.append(entry)
+            (sweep_dir / f"{i:03d}.png.json").write_text(json.dumps(entry, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+            marker = "!!" if outcome == "OOB_WRITE" else ".."
+            print(f"[sweep {i}/{args.sweep}] {marker} {source} model={model_used or '-'} "
+                  f"recipe={json.dumps(recipe, sort_keys=True)} -> {outcome}")
+            if evidence:
+                print(f"             {evidence}")
+            print(f"             tally: CONTROL={tally['CONTROL']} OOB_WRITE={tally['OOB_WRITE']} "
+                  f"REJECTED={tally['REJECTED']} TIMEOUT={tally['TIMEOUT']}")
+
+            previous_data = data
+            if i < args.sweep:
+                time.sleep(args.sweep_delay)
+    except KeyboardInterrupt:
+        interrupted = True
+        print("[ai_mutate] sweep interrupted by user", file=sys.stderr)
+
+    summary = {"requested": args.sweep, "completed": len(history), "interrupted": interrupted, "tally": tally, "history": history}
+    summary_path = sweep_dir / "summary.json"
+    summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"[ai_mutate] sweep done: {len(history)}/{args.sweep} run, "
+          f"CONTROL={tally['CONTROL']} OOB_WRITE={tally['OOB_WRITE']} "
+          f"REJECTED={tally['REJECTED']} TIMEOUT={tally['TIMEOUT']}")
+    print(f"[ai_mutate] summary: {summary_path.resolve()}")
+    return 0
+
+
 def parse_profile(value: str) -> Mapping[str, Any]:
     path = Path(value)
     text = path.read_text(encoding="utf-8") if path.is_file() else value
@@ -441,7 +638,7 @@ def parse_profile(value: str) -> Mapping[str, Any]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--kind", choices=("png", "pdu"), default="png")
-    parser.add_argument("--target", choices=("oob", "control"), default="oob")
+    parser.add_argument("--target", choices=("oob", "control", "any"), default="oob")
     parser.add_argument("--remote-ssh", default=DEFAULT_REMOTE_SSH, help="SSH target (user@host) for the primary Ollama instance")
     parser.add_argument("--remote-bind-host", default=None, help="address Ollama is bound to on the remote host (default: derived from --remote-ssh)")
     parser.add_argument("--remote-port", type=int, default=DEFAULT_REMOTE_PORT, help="Ollama port on the remote host")
@@ -459,9 +656,20 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-fallback", action="store_true", help="fail if Ollama or recipe validation fails")
     parser.add_argument("--adb-push", action="store_true", help="copy output into PurrView private files on a debug device")
     parser.add_argument("--serial", help="adb device serial")
+    parser.add_argument("--sweep", type=int, default=0, metavar="N",
+                         help="run N live recipes against a real device via AiSweepReceiver instead of "
+                              "the single-shot flow; each is pushed, triggered and classified from logcat "
+                              "as CONTROL/OOB_WRITE/REJECTED/TIMEOUT")
+    parser.add_argument("--sweep-target", choices=("any", "oob", "control"), default="any",
+                         help="constrain sweep recipes to one outcome, or let the model land on either (default)")
+    parser.add_argument("--sweep-delay", type=float, default=1.5, help="seconds to pause between sweep iterations")
+    parser.add_argument("--sweep-timeout", type=float, default=4.0,
+                         help="seconds to wait for a sweep iteration's outcome in logcat before marking it TIMEOUT")
     args = parser.parse_args(argv)
     if args.adb_push and args.kind != "png":
         parser.error("--adb-push currently supports the PurrView PNG worker only")
+    if args.sweep > 0:
+        return run_sweep(args)
 
     try:
         profile = parse_profile(args.profile)
