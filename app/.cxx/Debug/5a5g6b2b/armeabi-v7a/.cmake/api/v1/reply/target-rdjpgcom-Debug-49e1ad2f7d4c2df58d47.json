@@ -1,0 +1,142 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/armeabi-v7a/rdjpgcom"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"install",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"third_party/libjpeg-turbo-2.0.4/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 658,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1384,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 500,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIE"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 3,
+					"path" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a/third_party/libjpeg-turbo-2.0.4"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libjpeg-turbo-2.0.4"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0
+			],
+			"sysroot" : 
+			{
+				"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+			}
+		}
+	],
+	"id" : "rdjpgcom::@c2f77544561e2a90781b",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "bin"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/usr/local"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security  -fno-limit-debug-info",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-nostdlib++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-latomic -lm",
+				"role" : "libraries"
+			}
+		],
+		"language" : "C",
+		"sysroot" : 
+		{
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+		}
+	},
+	"name" : "rdjpgcom",
+	"nameOnDisk" : "rdjpgcom",
+	"paths" : 
+	{
+		"build" : "third_party/libjpeg-turbo-2.0.4",
+		"source" : "third_party/libjpeg-turbo-2.0.4"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/rdjpgcom.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

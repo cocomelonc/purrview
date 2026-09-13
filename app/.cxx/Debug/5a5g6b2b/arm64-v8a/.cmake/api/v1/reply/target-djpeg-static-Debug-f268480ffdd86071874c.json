@@ -1,0 +1,199 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/djpeg-static"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_libraries",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"third_party/libjpeg-turbo-2.0.4/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 648,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 651,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 500,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIE"
+				},
+				{
+					"fragment" : "-DBMP_SUPPORTED -DGIF_SUPPORTED -DPPM_SUPPORTED -DTARGA_SUPPORTED "
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 3,
+					"path" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/arm64-v8a/third_party/libjpeg-turbo-2.0.4"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libjpeg-turbo-2.0.4"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7
+			],
+			"sysroot" : 
+			{
+				"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+			}
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "jpeg-static::@c2f77544561e2a90781b"
+		}
+	],
+	"id" : "djpeg-static::@c2f77544561e2a90781b",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-nostdlib++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "third_party/libjpeg-turbo-2.0.4/libjpeg.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-latomic -lm",
+				"role" : "libraries"
+			}
+		],
+		"language" : "C",
+		"sysroot" : 
+		{
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+		}
+	},
+	"name" : "djpeg-static",
+	"nameOnDisk" : "djpeg-static",
+	"paths" : 
+	{
+		"build" : "third_party/libjpeg-turbo-2.0.4",
+		"source" : "third_party/libjpeg-turbo-2.0.4"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/djpeg.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/cdjpeg.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/rdcolmap.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/rdswitch.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/wrgif.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/wrppm.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/wrbmp.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/wrtarga.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

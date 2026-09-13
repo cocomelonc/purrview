@@ -1,0 +1,6 @@
+P2
+# valid control fixture: maxval covers every sample byte/value
+2 2
+255
+0 64
+128 255

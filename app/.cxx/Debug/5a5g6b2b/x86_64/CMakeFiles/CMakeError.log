@@ -1,0 +1,1179 @@
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_8152e && [1/2] Building C object CMakeFiles/cmTC_8152e.dir/src.c.o
+FAILED: CMakeFiles/cmTC_8152e.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DCMAKE_HAVE_LIBC_PTHREAD  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fPIE -MD -MT CMakeFiles/cmTC_8152e.dir/src.c.o -MF CMakeFiles/cmTC_8152e.dir/src.c.o.d -o CMakeFiles/cmTC_8152e.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:13:3: error: call to undeclared function 'pthread_cancel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   13 |   pthread_cancel(thread);
+      |   ^
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:13:3: note: did you mean 'pthread_once'?
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/pthread.h:264:5: note: 'pthread_once' declared here
+  264 | int pthread_once(pthread_once_t* _Nonnull __once, void (* _Nonnull __init_routine)(void));
+      |     ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_4dfd0 && [1/2] Building C object CMakeFiles/cmTC_4dfd0.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_4dfd0
+FAILED: cmTC_4dfd0 
+: && /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -DCHECK_FUNCTION_EXISTS=pthread_create -nostdlib++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments CMakeFiles/cmTC_4dfd0.dir/CheckFunctionExists.c.o -o cmTC_4dfd0  -lpthreads  -latomic -lm && :
+ld.lld: error: unable to find library -lpthreads
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+Determining if the function pthread_create exists in the pthread failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_8fb3a && [1/2] Building C object CMakeFiles/cmTC_8fb3a.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_8fb3a
+FAILED: cmTC_8fb3a 
+: && /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -DCHECK_FUNCTION_EXISTS=pthread_create -nostdlib++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments CMakeFiles/cmTC_8fb3a.dir/CheckFunctionExists.c.o -o cmTC_8fb3a  -lpthread  -latomic -lm && :
+ld.lld: error: unable to find library -lpthread
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+Determining if files GLUT/glut.h exist failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_ae7d0 && [1/2] Building C object CMakeFiles/cmTC_ae7d0.dir/HAVE_GLUT_GLUT_H.c.o
+FAILED: CMakeFiles/cmTC_ae7d0.dir/HAVE_GLUT_GLUT_H.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_ae7d0.dir/HAVE_GLUT_GLUT_H.c.o -MF CMakeFiles/cmTC_ae7d0.dir/HAVE_GLUT_GLUT_H.c.o.d -o CMakeFiles/cmTC_ae7d0.dir/HAVE_GLUT_GLUT_H.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_GLUT_GLUT_H.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_GLUT_GLUT_H.c:2:10: fatal error: 'GLUT/glut.h' file not found
+    2 | #include <GLUT/glut.h>
+      |          ^~~~~~~~~~~~~
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source:
+/* */
+#include <GLUT/glut.h>
+
+
+int main(void){return 0;}
+
+Determining if files GL/glut.h exist failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_59519 && [1/2] Building C object CMakeFiles/cmTC_59519.dir/HAVE_GL_GLUT_H.c.o
+FAILED: CMakeFiles/cmTC_59519.dir/HAVE_GL_GLUT_H.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_59519.dir/HAVE_GL_GLUT_H.c.o -MF CMakeFiles/cmTC_59519.dir/HAVE_GL_GLUT_H.c.o.d -o CMakeFiles/cmTC_59519.dir/HAVE_GL_GLUT_H.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_GL_GLUT_H.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_GL_GLUT_H.c:2:10: fatal error: 'GL/glut.h' file not found
+    2 | #include <GL/glut.h>
+      |          ^~~~~~~~~~~
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source:
+/* */
+#include <GL/glut.h>
+
+
+int main(void){return 0;}
+
+Determining if files OpenGL/glut.h exist failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_634ea && [1/2] Building C object CMakeFiles/cmTC_634ea.dir/HAVE_OPENGL_GLUT_H.c.o
+FAILED: CMakeFiles/cmTC_634ea.dir/HAVE_OPENGL_GLUT_H.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_634ea.dir/HAVE_OPENGL_GLUT_H.c.o -MF CMakeFiles/cmTC_634ea.dir/HAVE_OPENGL_GLUT_H.c.o.d -o CMakeFiles/cmTC_634ea.dir/HAVE_OPENGL_GLUT_H.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_OPENGL_GLUT_H.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_OPENGL_GLUT_H.c:2:10: fatal error: 'OpenGL/glut.h' file not found
+    2 | #include <OpenGL/glut.h>
+      |          ^~~~~~~~~~~~~~~
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source:
+/* */
+#include <OpenGL/glut.h>
+
+
+int main(void){return 0;}
+
+Determining if files shlwapi.h exist failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_21d21 && [1/2] Building C object CMakeFiles/cmTC_21d21.dir/HAVE_SHLWAPI_H.c.o
+FAILED: CMakeFiles/cmTC_21d21.dir/HAVE_SHLWAPI_H.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_21d21.dir/HAVE_SHLWAPI_H.c.o -MF CMakeFiles/cmTC_21d21.dir/HAVE_SHLWAPI_H.c.o.d -o CMakeFiles/cmTC_21d21.dir/HAVE_SHLWAPI_H.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_SHLWAPI_H.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_SHLWAPI_H.c:2:10: fatal error: 'shlwapi.h' file not found
+    2 | #include <shlwapi.h>
+      |          ^~~~~~~~~~~
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source:
+/* */
+#include <shlwapi.h>
+
+
+int main(void){return 0;}
+
+Determining if files wincodec.h exist failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_fdb87 && [1/2] Building C object CMakeFiles/cmTC_fdb87.dir/HAVE_WINCODEC_H.c.o
+FAILED: CMakeFiles/cmTC_fdb87.dir/HAVE_WINCODEC_H.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_fdb87.dir/HAVE_WINCODEC_H.c.o -MF CMakeFiles/cmTC_fdb87.dir/HAVE_WINCODEC_H.c.o.d -o CMakeFiles/cmTC_fdb87.dir/HAVE_WINCODEC_H.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_WINCODEC_H.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_WINCODEC_H.c:2:10: fatal error: 'wincodec.h' file not found
+    2 | #include <wincodec.h>
+      |          ^~~~~~~~~~~~
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source:
+/* */
+#include <wincodec.h>
+
+
+int main(void){return 0;}
+
+Determining if files windows.h exist failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_81eea && [1/2] Building C object CMakeFiles/cmTC_81eea.dir/HAVE_WINDOWS_H.c.o
+FAILED: CMakeFiles/cmTC_81eea.dir/HAVE_WINDOWS_H.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_81eea.dir/HAVE_WINDOWS_H.c.o -MF CMakeFiles/cmTC_81eea.dir/HAVE_WINDOWS_H.c.o.d -o CMakeFiles/cmTC_81eea.dir/HAVE_WINDOWS_H.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_WINDOWS_H.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CheckIncludeFiles/HAVE_WINDOWS_H.c:2:10: fatal error: 'windows.h' file not found
+    2 | #include <windows.h>
+      |          ^~~~~~~~~~~
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source:
+/* */
+#include <windows.h>
+
+
+int main(void){return 0;}
+
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS32 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_c00d8 && [1/2] Building C object CMakeFiles/cmTC_c00d8.dir/src.c.o
+FAILED: CMakeFiles/cmTC_c00d8.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS32 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_c00d8.dir/src.c.o -MF CMakeFiles/cmTC_c00d8.dir/src.c.o.d -o CMakeFiles/cmTC_c00d8.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS32)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS32 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_3ecc8 && [1/2] Building C object CMakeFiles/cmTC_3ecc8.dir/src.c.o
+FAILED: CMakeFiles/cmTC_3ecc8.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS32 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mips32 -fPIE -MD -MT CMakeFiles/cmTC_3ecc8.dir/src.c.o -MF CMakeFiles/cmTC_3ecc8.dir/src.c.o.d -o CMakeFiles/cmTC_3ecc8.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+error: unknown target CPU 'mips32'
+note: valid target CPU values are: nocona, core2, penryn, bonnell, atom, silvermont, slm, goldmont, goldmont-plus, tremont, nehalem, corei7, westmere, sandybridge, corei7-avx, ivybridge, core-avx-i, haswell, core-avx2, broadwell, skylake, skylake-avx512, skx, cascadelake, cooperlake, cannonlake, icelake-client, rocketlake, icelake-server, tigerlake, sapphirerapids, alderlake, raptorlake, meteorlake, arrowlake, arrowlake-s, lunarlake, gracemont, pantherlake, sierraforest, grandridge, graniterapids, graniterapids-d, emeraldrapids, clearwaterforest, knl, knm, k8, athlon64, athlon-fx, opteron, k8-sse3, athlon64-sse3, opteron-sse3, amdfam10, barcelona, btver1, btver2, bdver1, bdver2, bdver3, bdver4, znver1, znver2, znver3, znver4, x86-64, x86-64-v2, x86-64-v3, x86-64-v4
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS32)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS_DSP_R2 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_a0acf && [1/2] Building C object CMakeFiles/cmTC_a0acf.dir/src.c.o
+FAILED: CMakeFiles/cmTC_a0acf.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS_DSP_R2 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_a0acf.dir/src.c.o -MF CMakeFiles/cmTC_a0acf.dir/src.c.o.d -o CMakeFiles/cmTC_a0acf.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS_DSP_R2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS_DSP_R2 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_cd09c && [1/2] Building C object CMakeFiles/cmTC_cd09c.dir/src.c.o
+FAILED: CMakeFiles/cmTC_cd09c.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS_DSP_R2 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mdspr2 -fPIE -MD -MT CMakeFiles/cmTC_cd09c.dir/src.c.o -MF CMakeFiles/cmTC_cd09c.dir/src.c.o.d -o CMakeFiles/cmTC_cd09c.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mdspr2' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS_DSP_R2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test HAS_COMPILE_FLAG failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_fd735 && [1/2] Building C object CMakeFiles/cmTC_fd735.dir/src.c.o
+FAILED: CMakeFiles/cmTC_fd735.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DHAS_COMPILE_FLAG  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mdspr2 -fPIE   -mno-dspr2 -MD -MT CMakeFiles/cmTC_fd735.dir/src.c.o -MF CMakeFiles/cmTC_fd735.dir/src.c.o.d -o CMakeFiles/cmTC_fd735.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mdspr2' for target 'x86_64-none-linux-android21'
+clang: error: unsupported option '-mno-dspr2' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_NEON failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_b2bd1 && [1/2] Building C object CMakeFiles/cmTC_b2bd1.dir/src.c.o
+FAILED: CMakeFiles/cmTC_b2bd1.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_NEON -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_b2bd1.dir/src.c.o -MF CMakeFiles/cmTC_b2bd1.dir/src.c.o.d -o CMakeFiles/cmTC_b2bd1.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_NEON)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_NEON failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_de8ba && [1/2] Building C object CMakeFiles/cmTC_de8ba.dir/src.c.o
+FAILED: CMakeFiles/cmTC_de8ba.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_NEON -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mfpu=neon -fPIE -MD -MT CMakeFiles/cmTC_de8ba.dir/src.c.o -MF CMakeFiles/cmTC_de8ba.dir/src.c.o.d -o CMakeFiles/cmTC_de8ba.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mfpu=' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_NEON)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MSA failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_3010a && [1/2] Building C object CMakeFiles/cmTC_3010a.dir/src.c.o
+FAILED: CMakeFiles/cmTC_3010a.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MSA -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_3010a.dir/src.c.o -MF CMakeFiles/cmTC_3010a.dir/src.c.o.d -o CMakeFiles/cmTC_3010a.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MSA)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MSA failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_55812 && [1/2] Building C object CMakeFiles/cmTC_55812.dir/src.c.o
+FAILED: CMakeFiles/cmTC_55812.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MSA -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mmsa -fPIE -MD -MT CMakeFiles/cmTC_55812.dir/src.c.o -MF CMakeFiles/cmTC_55812.dir/src.c.o.d -o CMakeFiles/cmTC_55812.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mmsa' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MSA)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test HAS_COMPILE_FLAG failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_e56fa && [1/2] Building C object CMakeFiles/cmTC_e56fa.dir/src.c.o
+FAILED: CMakeFiles/cmTC_e56fa.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DHAS_COMPILE_FLAG  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mmsa -fPIE   -mno-msa -MD -MT CMakeFiles/cmTC_e56fa.dir/src.c.o -MF CMakeFiles/cmTC_e56fa.dir/src.c.o.d -o CMakeFiles/cmTC_e56fa.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mmsa' for target 'x86_64-none-linux-android21'
+clang: error: unsupported option '-mno-msa' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS32 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_22956 && [1/2] Building C object CMakeFiles/cmTC_22956.dir/src.c.o
+FAILED: CMakeFiles/cmTC_22956.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS32 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_22956.dir/src.c.o -MF CMakeFiles/cmTC_22956.dir/src.c.o.d -o CMakeFiles/cmTC_22956.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS32)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS32 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_4d5cc && [1/2] Building C object CMakeFiles/cmTC_4d5cc.dir/src.c.o
+FAILED: CMakeFiles/cmTC_4d5cc.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS32 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mips32 -fPIE -MD -MT CMakeFiles/cmTC_4d5cc.dir/src.c.o -MF CMakeFiles/cmTC_4d5cc.dir/src.c.o.d -o CMakeFiles/cmTC_4d5cc.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+error: unknown target CPU 'mips32'
+note: valid target CPU values are: nocona, core2, penryn, bonnell, atom, silvermont, slm, goldmont, goldmont-plus, tremont, nehalem, corei7, westmere, sandybridge, corei7-avx, ivybridge, core-avx-i, haswell, core-avx2, broadwell, skylake, skylake-avx512, skx, cascadelake, cooperlake, cannonlake, icelake-client, rocketlake, icelake-server, tigerlake, sapphirerapids, alderlake, raptorlake, meteorlake, arrowlake, arrowlake-s, lunarlake, gracemont, pantherlake, sierraforest, grandridge, graniterapids, graniterapids-d, emeraldrapids, clearwaterforest, knl, knm, k8, athlon64, athlon-fx, opteron, k8-sse3, athlon64-sse3, opteron-sse3, amdfam10, barcelona, btver1, btver2, bdver1, bdver2, bdver3, bdver4, znver1, znver2, znver3, znver4, x86-64, x86-64-v2, x86-64-v3, x86-64-v4
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS32)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS_DSP_R2 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_e296c && [1/2] Building C object CMakeFiles/cmTC_e296c.dir/src.c.o
+FAILED: CMakeFiles/cmTC_e296c.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS_DSP_R2 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_e296c.dir/src.c.o -MF CMakeFiles/cmTC_e296c.dir/src.c.o.d -o CMakeFiles/cmTC_e296c.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS_DSP_R2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS_DSP_R2 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_39cae && [1/2] Building C object CMakeFiles/cmTC_39cae.dir/src.c.o
+FAILED: CMakeFiles/cmTC_39cae.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS_DSP_R2 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mdspr2 -fPIE -MD -MT CMakeFiles/cmTC_39cae.dir/src.c.o -MF CMakeFiles/cmTC_39cae.dir/src.c.o.d -o CMakeFiles/cmTC_39cae.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mdspr2' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS_DSP_R2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test HAS_COMPILE_FLAG failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_78c08 && [1/2] Building C object CMakeFiles/cmTC_78c08.dir/src.c.o
+FAILED: CMakeFiles/cmTC_78c08.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DHAS_COMPILE_FLAG  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mdspr2 -fPIE   -mno-dspr2 -MD -MT CMakeFiles/cmTC_78c08.dir/src.c.o -MF CMakeFiles/cmTC_78c08.dir/src.c.o.d -o CMakeFiles/cmTC_78c08.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mdspr2' for target 'x86_64-none-linux-android21'
+clang: error: unsupported option '-mno-dspr2' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_NEON failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_4dbf7 && [1/2] Building C object CMakeFiles/cmTC_4dbf7.dir/src.c.o
+FAILED: CMakeFiles/cmTC_4dbf7.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_NEON -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_4dbf7.dir/src.c.o -MF CMakeFiles/cmTC_4dbf7.dir/src.c.o.d -o CMakeFiles/cmTC_4dbf7.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_NEON)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_NEON failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_7d43b && [1/2] Building C object CMakeFiles/cmTC_7d43b.dir/src.c.o
+FAILED: CMakeFiles/cmTC_7d43b.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_NEON -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mfpu=neon -fPIE -MD -MT CMakeFiles/cmTC_7d43b.dir/src.c.o -MF CMakeFiles/cmTC_7d43b.dir/src.c.o.d -o CMakeFiles/cmTC_7d43b.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mfpu=' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_NEON)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MSA failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_1aab0 && [1/2] Building C object CMakeFiles/cmTC_1aab0.dir/src.c.o
+FAILED: CMakeFiles/cmTC_1aab0.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MSA -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_1aab0.dir/src.c.o -MF CMakeFiles/cmTC_1aab0.dir/src.c.o.d -o CMakeFiles/cmTC_1aab0.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MSA)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MSA failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_e5020 && [1/2] Building C object CMakeFiles/cmTC_e5020.dir/src.c.o
+FAILED: CMakeFiles/cmTC_e5020.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MSA -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mmsa -fPIE -MD -MT CMakeFiles/cmTC_e5020.dir/src.c.o -MF CMakeFiles/cmTC_e5020.dir/src.c.o.d -o CMakeFiles/cmTC_e5020.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mmsa' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MSA)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test HAS_COMPILE_FLAG failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_f65a0 && [1/2] Building C object CMakeFiles/cmTC_f65a0.dir/src.c.o
+FAILED: CMakeFiles/cmTC_f65a0.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DHAS_COMPILE_FLAG  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mmsa -fPIE   -mno-msa -MD -MT CMakeFiles/cmTC_f65a0.dir/src.c.o -MF CMakeFiles/cmTC_f65a0.dir/src.c.o.d -o CMakeFiles/cmTC_f65a0.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mmsa' for target 'x86_64-none-linux-android21'
+clang: error: unsupported option '-mno-msa' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS32 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_a9eae && [1/2] Building C object CMakeFiles/cmTC_a9eae.dir/src.c.o
+FAILED: CMakeFiles/cmTC_a9eae.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS32 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_a9eae.dir/src.c.o -MF CMakeFiles/cmTC_a9eae.dir/src.c.o.d -o CMakeFiles/cmTC_a9eae.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS32)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS32 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_c9ff6 && [1/2] Building C object CMakeFiles/cmTC_c9ff6.dir/src.c.o
+FAILED: CMakeFiles/cmTC_c9ff6.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS32 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mips32 -fPIE -MD -MT CMakeFiles/cmTC_c9ff6.dir/src.c.o -MF CMakeFiles/cmTC_c9ff6.dir/src.c.o.d -o CMakeFiles/cmTC_c9ff6.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+error: unknown target CPU 'mips32'
+note: valid target CPU values are: nocona, core2, penryn, bonnell, atom, silvermont, slm, goldmont, goldmont-plus, tremont, nehalem, corei7, westmere, sandybridge, corei7-avx, ivybridge, core-avx-i, haswell, core-avx2, broadwell, skylake, skylake-avx512, skx, cascadelake, cooperlake, cannonlake, icelake-client, rocketlake, icelake-server, tigerlake, sapphirerapids, alderlake, raptorlake, meteorlake, arrowlake, arrowlake-s, lunarlake, gracemont, pantherlake, sierraforest, grandridge, graniterapids, graniterapids-d, emeraldrapids, clearwaterforest, knl, knm, k8, athlon64, athlon-fx, opteron, k8-sse3, athlon64-sse3, opteron-sse3, amdfam10, barcelona, btver1, btver2, bdver1, bdver2, bdver3, bdver4, znver1, znver2, znver3, znver4, x86-64, x86-64-v2, x86-64-v3, x86-64-v4
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS32)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS_DSP_R2 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_0d085 && [1/2] Building C object CMakeFiles/cmTC_0d085.dir/src.c.o
+FAILED: CMakeFiles/cmTC_0d085.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS_DSP_R2 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_0d085.dir/src.c.o -MF CMakeFiles/cmTC_0d085.dir/src.c.o.d -o CMakeFiles/cmTC_0d085.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS_DSP_R2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS_DSP_R2 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_e5bf9 && [1/2] Building C object CMakeFiles/cmTC_e5bf9.dir/src.c.o
+FAILED: CMakeFiles/cmTC_e5bf9.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS_DSP_R2 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mdspr2 -fPIE -MD -MT CMakeFiles/cmTC_e5bf9.dir/src.c.o -MF CMakeFiles/cmTC_e5bf9.dir/src.c.o.d -o CMakeFiles/cmTC_e5bf9.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mdspr2' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS_DSP_R2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test HAS_COMPILE_FLAG failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_36185 && [1/2] Building C object CMakeFiles/cmTC_36185.dir/src.c.o
+FAILED: CMakeFiles/cmTC_36185.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DHAS_COMPILE_FLAG  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mdspr2 -fPIE   -mno-dspr2 -MD -MT CMakeFiles/cmTC_36185.dir/src.c.o -MF CMakeFiles/cmTC_36185.dir/src.c.o.d -o CMakeFiles/cmTC_36185.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mdspr2' for target 'x86_64-none-linux-android21'
+clang: error: unsupported option '-mno-dspr2' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_NEON failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_2f0db && [1/2] Building C object CMakeFiles/cmTC_2f0db.dir/src.c.o
+FAILED: CMakeFiles/cmTC_2f0db.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_NEON -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_2f0db.dir/src.c.o -MF CMakeFiles/cmTC_2f0db.dir/src.c.o.d -o CMakeFiles/cmTC_2f0db.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_NEON)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_NEON failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_029d4 && [1/2] Building C object CMakeFiles/cmTC_029d4.dir/src.c.o
+FAILED: CMakeFiles/cmTC_029d4.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_NEON -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mfpu=neon -fPIE -MD -MT CMakeFiles/cmTC_029d4.dir/src.c.o -MF CMakeFiles/cmTC_029d4.dir/src.c.o.d -o CMakeFiles/cmTC_029d4.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mfpu=' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_NEON)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MSA failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_7b75a && [1/2] Building C object CMakeFiles/cmTC_7b75a.dir/src.c.o
+FAILED: CMakeFiles/cmTC_7b75a.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MSA -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_7b75a.dir/src.c.o -MF CMakeFiles/cmTC_7b75a.dir/src.c.o.d -o CMakeFiles/cmTC_7b75a.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MSA)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MSA failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_2e058 && [1/2] Building C object CMakeFiles/cmTC_2e058.dir/src.c.o
+FAILED: CMakeFiles/cmTC_2e058.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MSA -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mmsa -fPIE -MD -MT CMakeFiles/cmTC_2e058.dir/src.c.o -MF CMakeFiles/cmTC_2e058.dir/src.c.o.d -o CMakeFiles/cmTC_2e058.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mmsa' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MSA)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test HAS_COMPILE_FLAG failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_bde5e && [1/2] Building C object CMakeFiles/cmTC_bde5e.dir/src.c.o
+FAILED: CMakeFiles/cmTC_bde5e.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DHAS_COMPILE_FLAG  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mmsa -fPIE   -mno-msa -MD -MT CMakeFiles/cmTC_bde5e.dir/src.c.o -MF CMakeFiles/cmTC_bde5e.dir/src.c.o.d -o CMakeFiles/cmTC_bde5e.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mmsa' for target 'x86_64-none-linux-android21'
+clang: error: unsupported option '-mno-msa' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS32 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_1c83b && [1/2] Building C object CMakeFiles/cmTC_1c83b.dir/src.c.o
+FAILED: CMakeFiles/cmTC_1c83b.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS32 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_1c83b.dir/src.c.o -MF CMakeFiles/cmTC_1c83b.dir/src.c.o.d -o CMakeFiles/cmTC_1c83b.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS32)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS32 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_91449 && [1/2] Building C object CMakeFiles/cmTC_91449.dir/src.c.o
+FAILED: CMakeFiles/cmTC_91449.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS32 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mips32 -fPIE -MD -MT CMakeFiles/cmTC_91449.dir/src.c.o -MF CMakeFiles/cmTC_91449.dir/src.c.o.d -o CMakeFiles/cmTC_91449.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+error: unknown target CPU 'mips32'
+note: valid target CPU values are: nocona, core2, penryn, bonnell, atom, silvermont, slm, goldmont, goldmont-plus, tremont, nehalem, corei7, westmere, sandybridge, corei7-avx, ivybridge, core-avx-i, haswell, core-avx2, broadwell, skylake, skylake-avx512, skx, cascadelake, cooperlake, cannonlake, icelake-client, rocketlake, icelake-server, tigerlake, sapphirerapids, alderlake, raptorlake, meteorlake, arrowlake, arrowlake-s, lunarlake, gracemont, pantherlake, sierraforest, grandridge, graniterapids, graniterapids-d, emeraldrapids, clearwaterforest, knl, knm, k8, athlon64, athlon-fx, opteron, k8-sse3, athlon64-sse3, opteron-sse3, amdfam10, barcelona, btver1, btver2, bdver1, bdver2, bdver3, bdver4, znver1, znver2, znver3, znver4, x86-64, x86-64-v2, x86-64-v3, x86-64-v4
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS32)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS_DSP_R2 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_09ecf && [1/2] Building C object CMakeFiles/cmTC_09ecf.dir/src.c.o
+FAILED: CMakeFiles/cmTC_09ecf.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS_DSP_R2 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_09ecf.dir/src.c.o -MF CMakeFiles/cmTC_09ecf.dir/src.c.o.d -o CMakeFiles/cmTC_09ecf.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS_DSP_R2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS_DSP_R2 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_b50c7 && [1/2] Building C object CMakeFiles/cmTC_b50c7.dir/src.c.o
+FAILED: CMakeFiles/cmTC_b50c7.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS_DSP_R2 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mdspr2 -fPIE -MD -MT CMakeFiles/cmTC_b50c7.dir/src.c.o -MF CMakeFiles/cmTC_b50c7.dir/src.c.o.d -o CMakeFiles/cmTC_b50c7.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mdspr2' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS_DSP_R2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test HAS_COMPILE_FLAG failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_c94a6 && [1/2] Building C object CMakeFiles/cmTC_c94a6.dir/src.c.o
+FAILED: CMakeFiles/cmTC_c94a6.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DHAS_COMPILE_FLAG  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mdspr2 -fPIE   -mno-dspr2 -MD -MT CMakeFiles/cmTC_c94a6.dir/src.c.o -MF CMakeFiles/cmTC_c94a6.dir/src.c.o.d -o CMakeFiles/cmTC_c94a6.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mdspr2' for target 'x86_64-none-linux-android21'
+clang: error: unsupported option '-mno-dspr2' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_NEON failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_df8a6 && [1/2] Building C object CMakeFiles/cmTC_df8a6.dir/src.c.o
+FAILED: CMakeFiles/cmTC_df8a6.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_NEON -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_df8a6.dir/src.c.o -MF CMakeFiles/cmTC_df8a6.dir/src.c.o.d -o CMakeFiles/cmTC_df8a6.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_NEON)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_NEON failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_ca019 && [1/2] Building C object CMakeFiles/cmTC_ca019.dir/src.c.o
+FAILED: CMakeFiles/cmTC_ca019.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_NEON -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mfpu=neon -fPIE -MD -MT CMakeFiles/cmTC_ca019.dir/src.c.o -MF CMakeFiles/cmTC_ca019.dir/src.c.o.d -o CMakeFiles/cmTC_ca019.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mfpu=' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_NEON)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MSA failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_35d58 && [1/2] Building C object CMakeFiles/cmTC_35d58.dir/src.c.o
+FAILED: CMakeFiles/cmTC_35d58.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MSA -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_35d58.dir/src.c.o -MF CMakeFiles/cmTC_35d58.dir/src.c.o.d -o CMakeFiles/cmTC_35d58.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MSA)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MSA failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_b9a6e && [1/2] Building C object CMakeFiles/cmTC_b9a6e.dir/src.c.o
+FAILED: CMakeFiles/cmTC_b9a6e.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MSA -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mmsa -fPIE -MD -MT CMakeFiles/cmTC_b9a6e.dir/src.c.o -MF CMakeFiles/cmTC_b9a6e.dir/src.c.o.d -o CMakeFiles/cmTC_b9a6e.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mmsa' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MSA)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test HAS_COMPILE_FLAG failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_6d9e3 && [1/2] Building C object CMakeFiles/cmTC_6d9e3.dir/src.c.o
+FAILED: CMakeFiles/cmTC_6d9e3.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DHAS_COMPILE_FLAG  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mmsa -fPIE   -mno-msa -MD -MT CMakeFiles/cmTC_6d9e3.dir/src.c.o -MF CMakeFiles/cmTC_6d9e3.dir/src.c.o.d -o CMakeFiles/cmTC_6d9e3.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mmsa' for target 'x86_64-none-linux-android21'
+clang: error: unsupported option '-mno-msa' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS32 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_145b3 && [1/2] Building C object CMakeFiles/cmTC_145b3.dir/src.c.o
+FAILED: CMakeFiles/cmTC_145b3.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS32 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_145b3.dir/src.c.o -MF CMakeFiles/cmTC_145b3.dir/src.c.o.d -o CMakeFiles/cmTC_145b3.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS32)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS32 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_1cc1b && [1/2] Building C object CMakeFiles/cmTC_1cc1b.dir/src.c.o
+FAILED: CMakeFiles/cmTC_1cc1b.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS32 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mips32 -fPIE -MD -MT CMakeFiles/cmTC_1cc1b.dir/src.c.o -MF CMakeFiles/cmTC_1cc1b.dir/src.c.o.d -o CMakeFiles/cmTC_1cc1b.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+error: unknown target CPU 'mips32'
+note: valid target CPU values are: nocona, core2, penryn, bonnell, atom, silvermont, slm, goldmont, goldmont-plus, tremont, nehalem, corei7, westmere, sandybridge, corei7-avx, ivybridge, core-avx-i, haswell, core-avx2, broadwell, skylake, skylake-avx512, skx, cascadelake, cooperlake, cannonlake, icelake-client, rocketlake, icelake-server, tigerlake, sapphirerapids, alderlake, raptorlake, meteorlake, arrowlake, arrowlake-s, lunarlake, gracemont, pantherlake, sierraforest, grandridge, graniterapids, graniterapids-d, emeraldrapids, clearwaterforest, knl, knm, k8, athlon64, athlon-fx, opteron, k8-sse3, athlon64-sse3, opteron-sse3, amdfam10, barcelona, btver1, btver2, bdver1, bdver2, bdver3, bdver4, znver1, znver2, znver3, znver4, x86-64, x86-64-v2, x86-64-v3, x86-64-v4
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS32)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS_DSP_R2 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_2e957 && [1/2] Building C object CMakeFiles/cmTC_2e957.dir/src.c.o
+FAILED: CMakeFiles/cmTC_2e957.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS_DSP_R2 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_2e957.dir/src.c.o -MF CMakeFiles/cmTC_2e957.dir/src.c.o.d -o CMakeFiles/cmTC_2e957.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS_DSP_R2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MIPS_DSP_R2 failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_4c996 && [1/2] Building C object CMakeFiles/cmTC_4c996.dir/src.c.o
+FAILED: CMakeFiles/cmTC_4c996.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MIPS_DSP_R2 -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mdspr2 -fPIE -MD -MT CMakeFiles/cmTC_4c996.dir/src.c.o -MF CMakeFiles/cmTC_4c996.dir/src.c.o.d -o CMakeFiles/cmTC_4c996.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mdspr2' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MIPS_DSP_R2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test HAS_COMPILE_FLAG failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_cd9c7 && [1/2] Building C object CMakeFiles/cmTC_cd9c7.dir/src.c.o
+FAILED: CMakeFiles/cmTC_cd9c7.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DHAS_COMPILE_FLAG  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mdspr2 -fPIE   -mno-dspr2 -MD -MT CMakeFiles/cmTC_cd9c7.dir/src.c.o -MF CMakeFiles/cmTC_cd9c7.dir/src.c.o.d -o CMakeFiles/cmTC_cd9c7.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mdspr2' for target 'x86_64-none-linux-android21'
+clang: error: unsupported option '-mno-dspr2' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_NEON failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_37a25 && [1/2] Building C object CMakeFiles/cmTC_37a25.dir/src.c.o
+FAILED: CMakeFiles/cmTC_37a25.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_NEON -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_37a25.dir/src.c.o -MF CMakeFiles/cmTC_37a25.dir/src.c.o.d -o CMakeFiles/cmTC_37a25.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_NEON)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_NEON failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_f9430 && [1/2] Building C object CMakeFiles/cmTC_f9430.dir/src.c.o
+FAILED: CMakeFiles/cmTC_f9430.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_NEON -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mfpu=neon -fPIE -MD -MT CMakeFiles/cmTC_f9430.dir/src.c.o -MF CMakeFiles/cmTC_f9430.dir/src.c.o.d -o CMakeFiles/cmTC_f9430.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mfpu=' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_NEON)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MSA failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_b8045 && [1/2] Building C object CMakeFiles/cmTC_b8045.dir/src.c.o
+FAILED: CMakeFiles/cmTC_b8045.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MSA -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread  -fPIE -MD -MT CMakeFiles/cmTC_b8045.dir/src.c.o -MF CMakeFiles/cmTC_b8045.dir/src.c.o.d -o CMakeFiles/cmTC_b8045.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c:5:9: error: use of undeclared identifier 'this'
+    5 |         this is not valid code
+      |         ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MSA)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_MSA failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_43406 && [1/2] Building C object CMakeFiles/cmTC_43406.dir/src.c.o
+FAILED: CMakeFiles/cmTC_43406.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DWEBP_HAVE_FLAG_MSA -I/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1 -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mmsa -fPIE -MD -MT CMakeFiles/cmTC_43406.dir/src.c.o -MF CMakeFiles/cmTC_43406.dir/src.c.o.d -o CMakeFiles/cmTC_43406.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mmsa' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_MSA)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test HAS_COMPILE_FLAG failed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_b3641 && [1/2] Building C object CMakeFiles/cmTC_b3641.dir/src.c.o
+FAILED: CMakeFiles/cmTC_b3641.dir/src.c.o 
+/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=x86_64-none-linux-android21 --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DHAS_COMPILE_FLAG  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -pthread -mmsa -fPIE   -mno-msa -MD -MT CMakeFiles/cmTC_b3641.dir/src.c.o -MF CMakeFiles/cmTC_b3641.dir/src.c.o.d -o CMakeFiles/cmTC_b3641.dir/src.c.o -c /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/src.c
+clang: error: unsupported option '-mmsa' for target 'x86_64-none-linux-android21'
+clang: error: unsupported option '-mno-msa' for target 'x86_64-none-linux-android21'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main(void) { return 0; }

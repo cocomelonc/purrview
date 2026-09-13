@@ -1,0 +1,212 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"third_party/libjpeg-turbo-2.0.4/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1368,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1375,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1377,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1379,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1384,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1386,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1399,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1405,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1409,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"third_party/libjpeg-turbo-2.0.4/libjpeg.a"
+			],
+			"targetId" : "jpeg-static::@c2f77544561e2a90781b",
+			"targetIndex" : 4,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				{
+					"from" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a/third_party/libjpeg-turbo-2.0.4/cjpeg-static",
+					"to" : "cjpeg"
+				}
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				{
+					"from" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a/third_party/libjpeg-turbo-2.0.4/djpeg-static",
+					"to" : "djpeg"
+				}
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				{
+					"from" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a/third_party/libjpeg-turbo-2.0.4/jpegtran-static",
+					"to" : "jpegtran"
+				}
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/armeabi-v7a/rdjpgcom"
+			],
+			"targetId" : "rdjpgcom::@c2f77544561e2a90781b",
+			"targetIndex" : 8,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/armeabi-v7a/wrjpgcom"
+			],
+			"targetId" : "wrjpgcom::@c2f77544561e2a90781b",
+			"targetIndex" : 23,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "share/doc/libjpeg-turbo",
+			"paths" : 
+			[
+				"third_party/libjpeg-turbo-2.0.4/README.ijg",
+				"third_party/libjpeg-turbo-2.0.4/README.md",
+				"third_party/libjpeg-turbo-2.0.4/example.txt",
+				"third_party/libjpeg-turbo-2.0.4/tjexample.c",
+				"third_party/libjpeg-turbo-2.0.4/libjpeg.txt",
+				"third_party/libjpeg-turbo-2.0.4/structure.txt",
+				"third_party/libjpeg-turbo-2.0.4/usage.txt",
+				"third_party/libjpeg-turbo-2.0.4/wizard.txt",
+				"third_party/libjpeg-turbo-2.0.4/LICENSE.md"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 7,
+			"component" : "Unspecified",
+			"destination" : "share/man/man1",
+			"paths" : 
+			[
+				"third_party/libjpeg-turbo-2.0.4/cjpeg.1",
+				"third_party/libjpeg-turbo-2.0.4/djpeg.1",
+				"third_party/libjpeg-turbo-2.0.4/jpegtran.1",
+				"third_party/libjpeg-turbo-2.0.4/rdjpgcom.1",
+				"third_party/libjpeg-turbo-2.0.4/wrjpgcom.1"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 8,
+			"component" : "Unspecified",
+			"destination" : "lib/pkgconfig",
+			"paths" : 
+			[
+				"/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a/third_party/libjpeg-turbo-2.0.4/pkgscripts/libjpeg.pc",
+				"/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a/third_party/libjpeg-turbo-2.0.4/pkgscripts/libturbojpeg.pc"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 9,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a/third_party/libjpeg-turbo-2.0.4/jconfig.h",
+				"third_party/libjpeg-turbo-2.0.4/jerror.h",
+				"third_party/libjpeg-turbo-2.0.4/jmorecfg.h",
+				"third_party/libjpeg-turbo-2.0.4/jpeglib.h"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "third_party/libjpeg-turbo-2.0.4",
+		"source" : "third_party/libjpeg-turbo-2.0.4"
+	}
+}

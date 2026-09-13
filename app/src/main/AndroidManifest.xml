@@ -1,0 +1,23 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ <application android:label="PurrView" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:allowBackup="false" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:supportsRtl="true">
+  <activity android:name=".MainActivity" android:exported="true">
+   <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
+  </activity>
+  <service android:name=".WebpDecodeService"
+      android:process=":webp_decoder"
+      android:exported="false"
+      android:stopWithTask="true" />
+  <service android:name=".JpegDecodeService"
+      android:process=":jpeg_decoder"
+      android:exported="false"
+      android:stopWithTask="true" />
+  <service android:name=".PngDecodeService"
+      android:process=":png_decoder"
+      android:exported="false"
+      android:stopWithTask="true" />
+  <service android:name=".SmsDecodeService"
+      android:process=":sms_decoder"
+      android:exported="false"
+      android:stopWithTask="true" />
+ </application>
+</manifest>

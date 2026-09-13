@@ -1,0 +1,141 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/x86_64/md5cmp"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"third_party/libjpeg-turbo-2.0.4/md5/CMakeLists.txt",
+			"third_party/libjpeg-turbo-2.0.4/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 500,
+				"parent" : 2
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIE"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 3,
+					"path" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/third_party/libjpeg-turbo-2.0.4"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libjpeg-turbo-2.0.4"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2
+			],
+			"sysroot" : 
+			{
+				"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+			}
+		}
+	],
+	"id" : "md5cmp::@79941be4667f79624834",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-nostdlib++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-latomic -lm",
+				"role" : "libraries"
+			}
+		],
+		"language" : "C",
+		"sysroot" : 
+		{
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+		}
+	},
+	"name" : "md5cmp",
+	"nameOnDisk" : "md5cmp",
+	"paths" : 
+	{
+		"build" : "third_party/libjpeg-turbo-2.0.4/md5",
+		"source" : "third_party/libjpeg-turbo-2.0.4/md5"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/md5/md5cmp.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/md5/md5.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libjpeg-turbo-2.0.4/md5/md5hl.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

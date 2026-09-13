@@ -1,0 +1,527 @@
+The target system is: Android - 1 - x86_64
+The host system is: Linux - 6.12.32-amd64 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang 
+Build flags: -g;-DANDROID;-fdata-sections;-ffunction-sections;-funwind-tables;-fstack-protector-strong;-no-canonical-prefixes;-D_FORTIFY_SOURCE=2;-Wformat;-Werror=format-security;
+Id flags: -c;--target=x86_64-none-linux-android21 
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+
+The C compiler identification is Clang, found in "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/3.22.1-g37088a8/CompilerIdC/CMakeCCompilerId.o"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_a2dd9 && [1/2] Building C object CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o
+Android (13691557, +pgo, +bolt, +lto, +mlgo, based on r522817d) clang version 18.0.4 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)
+Target: x86_64-none-linux-android21
+Thread model: posix
+InstalledDir: /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin
+ (in-process)
+ "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" -cc1 -triple x86_64-none-linux-android21 -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -target-feature +sse4.2 -target-feature +popcnt -target-feature +cx16 -tune-cpu generic -debug-info-kind=constructor -dwarf-version=4 -debugger-tuning=gdb -fdebug-compilation-dir=/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp -resource-dir /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18 -dependency-file CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o -sys-header-deps -D ANDROID -D _FORTIFY_SOURCE=2 -isysroot /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -internal-isystem /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/include -internal-isystem /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/local/include -internal-externc-isystem /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/x86_64-linux-android -internal-externc-isystem /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/include -internal-externc-isystem /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include -Wformat -ferror-limit 19 -femulated-tls -stack-protector 2 -fgnuc-version=4.2.1 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o -x c /home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCCompilerABI.c
+clang -cc1 version 18.0.4 based upon LLVM 18.0.4 default target x86_64-unknown-linux-gnu
+ignoring nonexistent directory "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/local/include"
+ignoring nonexistent directory "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/include
+ /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/x86_64-linux-android
+ /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include
+End of search list.
+[2/2] Linking C executable cmTC_a2dd9
+Android (13691557, +pgo, +bolt, +lto, +mlgo, based on r522817d) clang version 18.0.4 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)
+Target: x86_64-none-linux-android21
+Thread model: posix
+InstalledDir: /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin
+ "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/ld.lld" --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -z now -z relro --hash-style=both --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /system/bin/linker64 -o cmTC_a2dd9 /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21/crtbegin_dynamic.o -L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/x86_64 -L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21 -L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android -L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib --build-id=sha1 --no-rosegment --no-undefined-version --fatal-warnings --no-undefined CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-x86_64-android.a -l:libunwind.a -ldl -lc /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-x86_64-android.a -l:libunwind.a -ldl /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21/crtend_android.o
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/include]
+    add: [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/x86_64-linux-android]
+    add: [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include]
+  end of search list found
+  collapse include dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/include] ==> [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/include]
+  collapse include dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/x86_64-linux-android] ==> [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/x86_64-linux-android]
+  collapse include dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include] ==> [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include]
+  implicit include dirs: [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/include;/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/x86_64-linux-android;/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld\.lld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_a2dd9 && [1/2] Building C object CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o]
+  ignore line: [Android (13691557  +pgo  +bolt  +lto  +mlgo  based on r522817d) clang version 18.0.4 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)]
+  ignore line: [Target: x86_64-none-linux-android21]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin]
+  ignore line: [ (in-process)]
+  ignore line: [ "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" -cc1 -triple x86_64-none-linux-android21 -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -target-feature +sse4.2 -target-feature +popcnt -target-feature +cx16 -tune-cpu generic -debug-info-kind=constructor -dwarf-version=4 -debugger-tuning=gdb -fdebug-compilation-dir=/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp -resource-dir /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18 -dependency-file CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o -sys-header-deps -D ANDROID -D _FORTIFY_SOURCE=2 -isysroot /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -internal-isystem /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/include -internal-isystem /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/local/include -internal-externc-isystem /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/x86_64-linux-android -internal-externc-isystem /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/include -internal-externc-isystem /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include -Wformat -ferror-limit 19 -femulated-tls -stack-protector 2 -fgnuc-version=4.2.1 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o -x c /home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCCompilerABI.c]
+  ignore line: [clang -cc1 version 18.0.4 based upon LLVM 18.0.4 default target x86_64-unknown-linux-gnu]
+  ignore line: [ignoring nonexistent directory "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/local/include"]
+  ignore line: [ignoring nonexistent directory "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/include]
+  ignore line: [ /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/x86_64-linux-android]
+  ignore line: [ /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include]
+  ignore line: [End of search list.]
+  ignore line: [[2/2] Linking C executable cmTC_a2dd9]
+  ignore line: [Android (13691557  +pgo  +bolt  +lto  +mlgo  based on r522817d) clang version 18.0.4 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)]
+  ignore line: [Target: x86_64-none-linux-android21]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin]
+  link line: [ "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/ld.lld" --sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot -z now -z relro --hash-style=both --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /system/bin/linker64 -o cmTC_a2dd9 /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21/crtbegin_dynamic.o -L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/x86_64 -L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21 -L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android -L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib --build-id=sha1 --no-rosegment --no-undefined-version --fatal-warnings --no-undefined CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-x86_64-android.a -l:libunwind.a -ldl -lc /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-x86_64-android.a -l:libunwind.a -ldl /home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21/crtend_android.o]
+    arg [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/ld.lld] ==> ignore
+    arg [--sysroot=/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot] ==> ignore
+    arg [-znow] ==> ignore
+    arg [-zrelro] ==> ignore
+    arg [--hash-style=both] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-pie] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/system/bin/linker64] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_a2dd9] ==> ignore
+    arg [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21/crtbegin_dynamic.o] ==> obj [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21/crtbegin_dynamic.o]
+    arg [-L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/x86_64] ==> dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/x86_64]
+    arg [-L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21] ==> dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21]
+    arg [-L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android] ==> dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android]
+    arg [-L/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib] ==> dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib]
+    arg [--build-id=sha1] ==> ignore
+    arg [--no-rosegment] ==> ignore
+    arg [--no-undefined-version] ==> ignore
+    arg [--fatal-warnings] ==> ignore
+    arg [--no-undefined] ==> ignore
+    arg [CMakeFiles/cmTC_a2dd9.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-x86_64-android.a] ==> lib [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-x86_64-android.a]
+    arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+    arg [-ldl] ==> lib [dl]
+    arg [-lc] ==> lib [c]
+    arg [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-x86_64-android.a] ==> lib [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-x86_64-android.a]
+    arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+    arg [-ldl] ==> lib [dl]
+    arg [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21/crtend_android.o] ==> obj [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21/crtend_android.o]
+  remove lib [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-x86_64-android.a]
+  remove lib [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/libclang_rt.builtins-x86_64-android.a]
+  collapse library dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/x86_64] ==> [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/x86_64]
+  collapse library dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21] ==> [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21]
+  collapse library dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android] ==> [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android]
+  collapse library dir [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib] ==> [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib]
+  implicit libs: [-l:libunwind.a;dl;c;-l:libunwind.a;dl]
+  implicit objs: [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21/crtbegin_dynamic.o;/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21/crtend_android.o]
+  implicit dirs: [/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/18/lib/linux/x86_64;/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/21;/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android;/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib]
+  implicit fwks: []
+
+
+Performing C SOURCE FILE Test HAVE_BUILTIN_BSWAP16 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_56456 && [1/2] Building C object CMakeFiles/cmTC_56456.dir/src.c.o
+[2/2] Linking C executable cmTC_56456
+
+
+Source file was:
+
+    int main(void) {
+      (void)__builtin_bswap16(0);
+      return 0;
+    }
+  
+Performing C SOURCE FILE Test HAVE_BUILTIN_BSWAP32 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_013a2 && [1/2] Building C object CMakeFiles/cmTC_013a2.dir/src.c.o
+[2/2] Linking C executable cmTC_013a2
+
+
+Source file was:
+
+    int main(void) {
+      (void)__builtin_bswap32(0);
+      return 0;
+    }
+  
+Performing C SOURCE FILE Test HAVE_BUILTIN_BSWAP64 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_de619 && [1/2] Building C object CMakeFiles/cmTC_de619.dir/src.c.o
+[2/2] Linking C executable cmTC_de619
+
+
+Source file was:
+
+    int main(void) {
+      (void)__builtin_bswap64(0);
+      return 0;
+    }
+  
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_b29bd && [1/2] Building C object CMakeFiles/cmTC_b29bd.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_b29bd
+
+
+
+Performing C SOURCE FILE Test HAVE_MATH_LIBRARY succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_0c219 && [1/2] Building C object CMakeFiles/cmTC_0c219.dir/src.c.o
+[2/2] Linking C executable cmTC_0c219
+
+
+Source file was:
+
+    #include <math.h>
+    int main(int argc, char** argv) {
+      return (int)pow(argc, 2.5);
+    }
+  
+Determining if files unistd.h exist passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_d269b && [1/2] Building C object CMakeFiles/cmTC_d269b.dir/HAVE_UNISTD_H.c.o
+[2/2] Linking C executable cmTC_d269b
+
+
+
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_SSE41 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_21fbe && [1/2] Building C object CMakeFiles/cmTC_21fbe.dir/src.c.o
+[2/2] Linking C executable cmTC_21fbe
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_SSE41)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_SSE2 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_c2293 && [1/2] Building C object CMakeFiles/cmTC_c2293.dir/src.c.o
+[2/2] Linking C executable cmTC_c2293
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_SSE2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_SSE41 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_e2eda && [1/2] Building C object CMakeFiles/cmTC_e2eda.dir/src.c.o
+[2/2] Linking C executable cmTC_e2eda
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_SSE41)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_SSE2 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_59270 && [1/2] Building C object CMakeFiles/cmTC_59270.dir/src.c.o
+[2/2] Linking C executable cmTC_59270
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_SSE2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_SSE41 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_cb3ce && [1/2] Building C object CMakeFiles/cmTC_cb3ce.dir/src.c.o
+[2/2] Linking C executable cmTC_cb3ce
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_SSE41)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_SSE2 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_a5a40 && [1/2] Building C object CMakeFiles/cmTC_a5a40.dir/src.c.o
+[2/2] Linking C executable cmTC_a5a40
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_SSE2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Determining if the include file sys/types.h exists passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_9a748 && [1/2] Building C object CMakeFiles/cmTC_9a748.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_9a748
+
+
+
+Determining if the include file stdint.h exists passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_d214d && [1/2] Building C object CMakeFiles/cmTC_d214d.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_d214d
+
+
+
+Determining if the include file stddef.h exists passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_1c399 && [1/2] Building C object CMakeFiles/cmTC_1c399.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_1c399
+
+
+
+Determining size of size_t passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_9ff90 && [1/2] Building C object CMakeFiles/cmTC_9ff90.dir/SIZE_T.c.o
+[2/2] Linking C executable cmTC_9ff90
+
+
+
+Determining size of unsigned long passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_2ce0f && [1/2] Building C object CMakeFiles/cmTC_2ce0f.dir/UNSIGNED_LONG.c.o
+[2/2] Linking C executable cmTC_2ce0f
+
+
+
+Performing C SOURCE FILE Test HAVE_BUILTIN_CTZL succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_1d31e && [1/2] Building C object CMakeFiles/cmTC_1d31e.dir/src.c.o
+[2/2] Linking C executable cmTC_1d31e
+
+
+Source file was:
+int main(int argc, char **argv) { unsigned long a = argc;  return __builtin_ctzl(a); }
+Determining if files locale.h exist passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_f946f && [1/2] Building C object CMakeFiles/cmTC_f946f.dir/HAVE_LOCALE_H.c.o
+[2/2] Linking C executable cmTC_f946f
+
+
+
+Determining if files stdlib.h exist passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_1185b && [1/2] Building C object CMakeFiles/cmTC_1185b.dir/HAVE_STDLIB_H.c.o
+[2/2] Linking C executable cmTC_1185b
+
+
+
+Determining if files sys/types.h exist passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_6a809 && [1/2] Building C object CMakeFiles/cmTC_6a809.dir/NEED_SYS_TYPES_H.c.o
+[2/2] Linking C executable cmTC_6a809
+
+
+
+Determining if the memset exist passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_b6901 && [1/2] Building C object CMakeFiles/cmTC_b6901.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_b6901
+
+
+File /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <string.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef memset
+  return ((int*)(&memset))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the memcpy exist passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_6436f && [1/2] Building C object CMakeFiles/cmTC_6436f.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_6436f
+
+
+File /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <string.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef memcpy
+  return ((int*)(&memcpy))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining size of unsigned char passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_f7eff && [1/2] Building C object CMakeFiles/cmTC_f7eff.dir/UNSIGNED_CHAR.c.o
+[2/2] Linking C executable cmTC_f7eff
+
+
+
+Determining size of unsigned short passed with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_7ddc1 && [1/2] Building C object CMakeFiles/cmTC_7ddc1.dir/UNSIGNED_SHORT.c.o
+[2/2] Linking C executable cmTC_7ddc1
+
+
+
+Performing C SOURCE FILE Test INCOMPLETE_TYPES succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_09fbf && [1/2] Building C object CMakeFiles/cmTC_09fbf.dir/src.c.o
+[2/2] Linking C executable cmTC_09fbf
+
+
+Source file was:
+int main(void) { typedef struct undefined_structure *undef_struct_ptr;  undef_struct_ptr ptr = 0;  return ptr != 0; }
+Performing C SOURCE FILE Test INLINE_WORKS succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_53c7b && [1/2] Building C object CMakeFiles/cmTC_53c7b.dir/src.c.o
+[2/2] Linking C executable cmTC_53c7b
+
+
+Source file was:
+__inline__ __attribute__((always_inline)) static int foo(void) { return 0; } int main(void) { return foo(); }
+Performing C SOURCE FILE Test HAVE_VERSION_SCRIPT succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_cbb4c && [1/2] Building C object CMakeFiles/cmTC_cbb4c.dir/src.c.o
+clang: warning: -Wl,--version-script,/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/third_party/libjpeg-turbo-2.0.4/conftest.map: 'linker' input unused [-Wunused-command-line-argument]
+[2/2] Linking C executable cmTC_cbb4c
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_SSE41 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_7ecc1 && [1/2] Building C object CMakeFiles/cmTC_7ecc1.dir/src.c.o
+[2/2] Linking C executable cmTC_7ecc1
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_SSE41)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_SSE2 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_0fd2e && [1/2] Building C object CMakeFiles/cmTC_0fd2e.dir/src.c.o
+[2/2] Linking C executable cmTC_0fd2e
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_SSE2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_SSE41 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_5c471 && [1/2] Building C object CMakeFiles/cmTC_5c471.dir/src.c.o
+[2/2] Linking C executable cmTC_5c471
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_SSE41)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    
+Performing C SOURCE FILE Test WEBP_HAVE_FLAG_SSE2 succeeded with the following output:
+Change Dir: /home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/x86_64/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja cmTC_f0716 && [1/2] Building C object CMakeFiles/cmTC_f0716.dir/src.c.o
+[2/2] Linking C executable cmTC_f0716
+
+
+Source file was:
+
+      #include "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/../src/dsp/dsp.h"
+      int main(void) {
+        #if !defined(WEBP_USE_SSE2)
+        this is not valid code
+        #endif
+        return 0;
+      }
+    

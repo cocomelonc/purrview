@@ -1,0 +1,180 @@
+{
+  "buildFiles": [
+    "/home/cocomelonc/research/purrview/app/src/main/cpp/CMakeLists.txt",
+    "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libjpeg-turbo-2.0.4/CMakeLists.txt",
+    "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libjpeg-turbo-2.0.4/cmakescripts/BuildPackages.cmake",
+    "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libjpeg-turbo-2.0.4/cmakescripts/GNUInstallDirs.cmake",
+    "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libjpeg-turbo-2.0.4/cmakescripts/cmake_uninstall.cmake.in",
+    "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libjpeg-turbo-2.0.4/md5/CMakeLists.txt",
+    "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/CMakeLists.txt",
+    "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/WebPConfig.cmake.in",
+    "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/cpu.cmake",
+    "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/cmake/deps.cmake"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/cocomelonc/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "cjpeg-static::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "cjpeg-static",
+      "output": "/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/cjpeg-static",
+      "runtimeFiles": []
+    },
+    "cpufeatures-webp::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "cpufeatures-webp",
+      "output": "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/arm64-v8a/third_party/libwebp-1.3.1/libcpufeatures-webp.a"
+    },
+    "dist::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "dist"
+    },
+    "djpeg-static::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "djpeg-static",
+      "output": "/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/djpeg-static",
+      "runtimeFiles": []
+    },
+    "jpeg-static::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "jpeg-static",
+      "output": "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/arm64-v8a/third_party/libjpeg-turbo-2.0.4/libjpeg.a"
+    },
+    "jpegtran-static::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "jpegtran-static",
+      "output": "/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/jpegtran-static",
+      "runtimeFiles": []
+    },
+    "md5cmp::@79941be4667f79624834": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "md5cmp",
+      "output": "/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/md5cmp",
+      "runtimeFiles": []
+    },
+    "purrview::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "purrview",
+      "output": "/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/libpurrview.so",
+      "runtimeFiles": []
+    },
+    "rdjpgcom::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "rdjpgcom",
+      "output": "/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/rdjpgcom",
+      "runtimeFiles": []
+    },
+    "sharpyuv::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "sharpyuv",
+      "output": "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/arm64-v8a/third_party/libwebp-1.3.1/libsharpyuv.a"
+    },
+    "simd::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "simd"
+    },
+    "tarball::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "tarball"
+    },
+    "testclean::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "testclean"
+    },
+    "uninstall::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "uninstall"
+    },
+    "webp::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "webp",
+      "output": "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/arm64-v8a/third_party/libwebp-1.3.1/libwebp.a"
+    },
+    "webpdecode::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "webpdecode"
+    },
+    "webpdecoder::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "webpdecoder",
+      "output": "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/arm64-v8a/third_party/libwebp-1.3.1/libwebpdecoder.a"
+    },
+    "webpdemux::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "webpdemux",
+      "output": "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/arm64-v8a/third_party/libwebp-1.3.1/libwebpdemux.a"
+    },
+    "webpdsp::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "webpdsp"
+    },
+    "webpdspdecode::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "webpdspdecode"
+    },
+    "webpencode::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "webpencode"
+    },
+    "webputils::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "webputils"
+    },
+    "webputilsdecode::@d0879b5c27b1a2fb046f": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "webputilsdecode"
+    },
+    "wrjpgcom::@c2f77544561e2a90781b": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "wrjpgcom",
+      "output": "/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/wrjpgcom",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": []
+}

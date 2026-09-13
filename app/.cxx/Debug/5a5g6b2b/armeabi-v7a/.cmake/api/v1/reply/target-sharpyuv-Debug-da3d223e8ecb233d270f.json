@@ -1,0 +1,257 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "third_party/libwebp-1.3.1/libsharpyuv.a"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"target_link_libraries",
+			"add_definitions",
+			"include_directories",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"third_party/libwebp-1.3.1/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 316,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 327,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 317,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 246,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 180,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 169,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 319,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security  -pthread -mfpu=neon  -fno-limit-debug-info  -fPIC -fvisibility=hidden"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 4,
+					"define" : "HAVE_CONFIG_H"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "HAVE_CPU_FEATURES_H=1"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 6,
+					"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/sources/android/cpufeatures"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a/third_party/libwebp-1.3.1"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/home/cocomelonc/research/purrview/app/src/main/cpp/third_party/libwebp-1.3.1/src"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				4,
+				6,
+				8,
+				10
+			],
+			"sysroot" : 
+			{
+				"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+			}
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "cpufeatures-webp::@d0879b5c27b1a2fb046f"
+		}
+	],
+	"id" : "sharpyuv::@d0879b5c27b1a2fb046f",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "lib"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/usr/local"
+		}
+	},
+	"name" : "sharpyuv",
+	"nameOnDisk" : "libsharpyuv.a",
+	"paths" : 
+	{
+		"build" : "third_party/libwebp-1.3.1",
+		"source" : "third_party/libwebp-1.3.1"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				4,
+				6,
+				8,
+				10
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				3,
+				5,
+				7,
+				9,
+				11
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv_sse2.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv_neon.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv_cpu.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv_cpu.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv_csp.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv_csp.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv_dsp.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv_dsp.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv_gamma.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv_gamma.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/sharpyuv.h",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

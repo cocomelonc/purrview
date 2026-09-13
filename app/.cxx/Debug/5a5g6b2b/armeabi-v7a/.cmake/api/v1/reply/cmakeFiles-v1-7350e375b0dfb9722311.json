@@ -1,0 +1,379 @@
+{
+	"inputs" : 
+	[
+		{
+			"path" : "CMakeLists.txt"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a/CMakeFiles/3.22.1-g37088a8/CMakeSystem.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/build/cmake/android.toolchain.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/build/cmake/android-legacy.toolchain.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/build/cmake/abis.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/build/cmake/platforms.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Initialize.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/build/cmake/hooks/pre/Android-Initialize.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a/CMakeFiles/3.22.1-g37088a8/CMakeCCompiler.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeGenericSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/build/cmake/hooks/pre/Android.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Linux.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/UnixPaths.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/build/cmake/hooks/pre/Android-Clang.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/ndk/27.3.13750724/build/cmake/flags.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"path" : "third_party/libwebp-1.3.1/CMakeLists.txt"
+		},
+		{
+			"path" : "third_party/libwebp-1.3.1/cmake/deps.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCSourceCompiles.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckSourceCompiles.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindThreads.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckLibraryExists.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFile.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCSourceCompiles.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageMessage.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindOpenGL.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageMessage.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFiles.cmake"
+		},
+		{
+			"path" : "third_party/libwebp-1.3.1/cmake/cpu.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakePushCheckState.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCCompilerFlag.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCSourceCompiles.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckCompilerFlag.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckSourceCompiles.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCCompilerFlag.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCCompilerFlag.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCCompilerFlag.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCCompilerFlag.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/GNUInstallDirs.cmake"
+		},
+		{
+			"path" : "third_party/libwebp-1.3.1/cmake/config.h.in"
+		},
+		{
+			"path" : "third_party/libwebp-1.3.1/sharpyuv/libsharpyuv.pc.in"
+		},
+		{
+			"path" : "third_party/libwebp-1.3.1/src/libwebpdecoder.pc.in"
+		},
+		{
+			"path" : "third_party/libwebp-1.3.1/src/libwebp.pc.in"
+		},
+		{
+			"path" : "third_party/libwebp-1.3.1/src/demux/libwebpdemux.pc.in"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakePackageConfigHelpers.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/WriteBasicConfigVersionFile.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakePackageConfigHelpers.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/WriteBasicConfigVersionFile.cmake"
+		},
+		{
+			"path" : "third_party/libwebp-1.3.1/cmake/WebPConfig.cmake.in"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/CMakeLists.txt"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/cmakescripts/GNUInstallDirs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCSourceCompiles.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFiles.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckTypeSize.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFile.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFileCXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/cocomelonc/Android/Sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckSymbolExists.cmake"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/jconfig.h.in"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/jconfigint.h.in"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/libjpeg.map.in"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/cmakescripts/BuildPackages.cmake"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/release/maketarball.in"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/release/libjpeg.pc.in"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/release/libturbojpeg.pc.in"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/cmakescripts/cmake_uninstall.cmake.in"
+		},
+		{
+			"path" : "third_party/libjpeg-turbo-2.0.4/md5/CMakeLists.txt"
+		}
+	],
+	"kind" : "cmakeFiles",
+	"paths" : 
+	{
+		"build" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a",
+		"source" : "/home/cocomelonc/research/purrview/app/src/main/cpp"
+	},
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}

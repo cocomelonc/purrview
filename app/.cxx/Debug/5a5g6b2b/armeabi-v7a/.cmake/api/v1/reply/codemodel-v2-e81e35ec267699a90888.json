@@ -1,0 +1,349 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"build" : "third_party/libwebp-1.3.1",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-third_party.libwebp-1.3.1-Debug-1da5b5ec5cfc584aeef9.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.7"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "third_party/libwebp-1.3.1",
+					"targetIndexes" : 
+					[
+						1,
+						9,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22
+					]
+				},
+				{
+					"build" : "third_party/libjpeg-turbo-2.0.4",
+					"childIndexes" : 
+					[
+						3
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-third_party.libjpeg-turbo-2.0.4-Debug-fc869fb9114954aacbb7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "third_party/libjpeg-turbo-2.0.4",
+					"targetIndexes" : 
+					[
+						0,
+						2,
+						3,
+						4,
+						5,
+						8,
+						10,
+						11,
+						12,
+						13,
+						23
+					]
+				},
+				{
+					"build" : "third_party/libjpeg-turbo-2.0.4/md5",
+					"jsonFile" : "directory-third_party.libjpeg-turbo-2.0.4.md5-Debug-7b1ed55a1f96e5756b12.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8.12"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 2,
+					"source" : "third_party/libjpeg-turbo-2.0.4/md5",
+					"targetIndexes" : 
+					[
+						6
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "purrview",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "WebP",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						9,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2,
+						3
+					],
+					"name" : "libjpeg-turbo",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						2,
+						3,
+						4,
+						5,
+						6,
+						8,
+						10,
+						11,
+						12,
+						13,
+						23
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "cjpeg-static::@c2f77544561e2a90781b",
+					"jsonFile" : "target-cjpeg-static-Debug-42d53e1b004aeffc77eb.json",
+					"name" : "cjpeg-static",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "cpufeatures-webp::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-cpufeatures-webp-Debug-ef5b99de701dd6fd60ed.json",
+					"name" : "cpufeatures-webp",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "dist::@c2f77544561e2a90781b",
+					"jsonFile" : "target-dist-Debug-7bccda2d1e33a959dd06.json",
+					"name" : "dist",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "djpeg-static::@c2f77544561e2a90781b",
+					"jsonFile" : "target-djpeg-static-Debug-981d8f5295d3cf1c0303.json",
+					"name" : "djpeg-static",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "jpeg-static::@c2f77544561e2a90781b",
+					"jsonFile" : "target-jpeg-static-Debug-67a33bbfbd5393cbe04c.json",
+					"name" : "jpeg-static",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "jpegtran-static::@c2f77544561e2a90781b",
+					"jsonFile" : "target-jpegtran-static-Debug-4cb6e05ce5891ccc2543.json",
+					"name" : "jpegtran-static",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "md5cmp::@79941be4667f79624834",
+					"jsonFile" : "target-md5cmp-Debug-837d2e1945df5a7d70de.json",
+					"name" : "md5cmp",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "purrview::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-purrview-Debug-3bd37e828715cf0201a9.json",
+					"name" : "purrview",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "rdjpgcom::@c2f77544561e2a90781b",
+					"jsonFile" : "target-rdjpgcom-Debug-49e1ad2f7d4c2df58d47.json",
+					"name" : "rdjpgcom",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "sharpyuv::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-sharpyuv-Debug-da3d223e8ecb233d270f.json",
+					"name" : "sharpyuv",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "simd::@c2f77544561e2a90781b",
+					"jsonFile" : "target-simd-Debug-bd9424ec1da8f85869fc.json",
+					"name" : "simd",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "tarball::@c2f77544561e2a90781b",
+					"jsonFile" : "target-tarball-Debug-ddc9cd80a79d01c476d7.json",
+					"name" : "tarball",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "testclean::@c2f77544561e2a90781b",
+					"jsonFile" : "target-testclean-Debug-bb18f3433c1b7d91a3e7.json",
+					"name" : "testclean",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "uninstall::@c2f77544561e2a90781b",
+					"jsonFile" : "target-uninstall-Debug-cf5f0e9b79d2a2ecf565.json",
+					"name" : "uninstall",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "webp::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-webp-Debug-1f0a325b0c53e5ab1bfb.json",
+					"name" : "webp",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "webpdecode::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-webpdecode-Debug-ffb428a1517f4768b01c.json",
+					"name" : "webpdecode",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "webpdecoder::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-webpdecoder-Debug-3a8aff9cce0cfaf64d99.json",
+					"name" : "webpdecoder",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "webpdemux::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-webpdemux-Debug-dafd11bee4e803626b3c.json",
+					"name" : "webpdemux",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "webpdsp::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-webpdsp-Debug-790926a8af31592da09a.json",
+					"name" : "webpdsp",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "webpdspdecode::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-webpdspdecode-Debug-5c06ec0ee56d90f24a1b.json",
+					"name" : "webpdspdecode",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "webpencode::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-webpencode-Debug-a708743eadfd447bfe18.json",
+					"name" : "webpencode",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "webputils::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-webputils-Debug-7d2fc129f0aa1ef6a983.json",
+					"name" : "webputils",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "webputilsdecode::@d0879b5c27b1a2fb046f",
+					"jsonFile" : "target-webputilsdecode-Debug-5f2e4d72973438d934f1.json",
+					"name" : "webputilsdecode",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "wrjpgcom::@c2f77544561e2a90781b",
+					"jsonFile" : "target-wrjpgcom-Debug-89972576b8fab23edd10.json",
+					"name" : "wrjpgcom",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/cocomelonc/research/purrview/app/.cxx/Debug/5a5g6b2b/armeabi-v7a",
+		"source" : "/home/cocomelonc/research/purrview/app/src/main/cpp"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}
