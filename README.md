@@ -62,7 +62,7 @@ The main UI stays alive throughout, exactly like the existing OOB write demo
 - the status card still reads the worker's last published state from before
 the isolated `:png_decoder` process aborted:
 
-![img](./screenshots/2026-09-14_06-25.png)
+![img](./screenshots/2026-09-14_11-00.png)
 
 ### WebP control and historical fixture
 

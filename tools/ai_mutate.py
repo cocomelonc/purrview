@@ -59,6 +59,13 @@ SWEEP_OUTCOME_PATTERNS = (
     (re.compile(r"native result: REJECTED"), "REJECTED"),
     (re.compile(r"fixture rejected:"), "REJECTED"),
 )
+# ReconCat (recon/) is a separate, standalone app that plays the attacker's
+# recon step; PurrView is this demo's vulnerable target and is never asked
+# to fingerprint itself.
+RECON_ACTION = "lab.reconcat.action.DUMP_RECON"
+RECON_RECEIVER = "lab.reconcat/.ReconReceiver"
+RECON_LOG_PATTERN = re.compile(r"RECON (\{.*\})")
+DEFAULT_PROFILE = {"device": "Motorola", "arch": "arm64", "purpose": "PurrView demo"}
 
 # These values are deliberately small.  They are enough to exercise the
 # PurrView parser's integer-narrowing paths without becoming a general fuzzer.
@@ -529,7 +536,7 @@ def run_sweep(args: argparse.Namespace) -> int:
         print("[ai_mutate] --sweep currently supports --kind png only (matches AiSweepReceiver)", file=sys.stderr)
         return 2
     try:
-        profile = parse_profile(args.profile)
+        profile = resolve_profile(args, live=True)
     except (OSError, json.JSONDecodeError, ValueError) as error:
         print(f"[ai_mutate] invalid --profile: {error}", file=sys.stderr)
         return 2
@@ -785,7 +792,7 @@ def run_density(args: argparse.Namespace) -> int:
     print(f"[ai_mutate] artifacts under {density_dir}")
 
     try:
-        profile = parse_profile(args.profile)
+        profile = resolve_profile(args, live=True)
     except (OSError, json.JSONDecodeError, ValueError) as error:
         print(f"[ai_mutate] invalid --profile: {error}", file=sys.stderr)
         return 2
@@ -907,6 +914,63 @@ def parse_profile(value: str) -> Mapping[str, Any]:
     return parsed
 
 
+def fetch_device_profile(serial: str | None, timeout: float = 2.0) -> Mapping[str, Any] | None:
+    """Best-effort live recon via the standalone ReconCat app (see recon/).
+
+    Never raises: returns None if ReconCat is not installed, no device is
+    reachable, or nothing shows up in logcat in time, so callers fall back
+    to DEFAULT_PROFILE. This deliberately does not touch lab.purrview - that
+    app is the demo's vulnerable target, not the attacker's recon tool.
+    """
+    adb = os.environ.get("ADB_BIN", "adb")
+    command = [adb] + (["-s", serial] if serial else [])
+    try:
+        subprocess.run(command + ["logcat", "-c"], check=True, timeout=5)
+        subprocess.run(
+            command + ["shell", "am", "broadcast", "-a", RECON_ACTION, "-n", RECON_RECEIVER],
+            check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, timeout=5,
+        )
+    except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
+        return None
+
+    deadline = time.monotonic() + timeout
+    while True:
+        try:
+            result = subprocess.run(
+                command + ["logcat", "-d", "-v", "brief", "-s", "ReconCat:I", "*:S"],
+                capture_output=True, text=True, check=True, timeout=5,
+            )
+        except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
+            return None
+        for line in result.stdout.splitlines():
+            match = RECON_LOG_PATTERN.search(line)
+            if not match:
+                continue
+            try:
+                parsed = json.loads(match.group(1))
+            except json.JSONDecodeError:
+                continue
+            if isinstance(parsed, Mapping):
+                return parsed
+        if time.monotonic() >= deadline:
+            return None
+        time.sleep(0.2)
+
+
+def resolve_profile(args: argparse.Namespace, live: bool) -> Mapping[str, Any]:
+    """--profile if the user set one, else live ReconCat recon, else the static default."""
+    if args.profile is not None:
+        return parse_profile(args.profile)
+    if live:
+        fetched = fetch_device_profile(args.serial)
+        if fetched is not None:
+            print(f"[ai_mutate] profile: live recon from ReconCat ({args.serial or 'default adb target'})",
+                  file=sys.stderr)
+            return fetched
+        print("[ai_mutate] profile: ReconCat unavailable, using static placeholder", file=sys.stderr)
+    return dict(DEFAULT_PROFILE)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--kind", choices=("png", "pdu"), default="png")
@@ -920,7 +984,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-remote", action="store_true", help="skip the remote Ollama instance; go straight to --local-endpoint")
     parser.add_argument("--local-endpoint", default=DEFAULT_LOCAL_ENDPOINT, help="fallback Ollama base URL")
     parser.add_argument("--local-model", default=DEFAULT_LOCAL_MODEL)
-    parser.add_argument("--profile", default='{"device":"Motorola","arch":"arm64","purpose":"PurrView demo"}')
+    parser.add_argument("--profile", default=None,
+                         help="device profile JSON (or path to one) fed to the model as context; default: "
+                              "live recon from the separate ReconCat app (see recon/) when a device round-trip "
+                              "is already happening (--sweep, --density, --adb-push), else a static placeholder")
     parser.add_argument("--output", type=Path, help="fixture path (default: build/ai-mutation/purrview-ai.<ext>)")
     parser.add_argument("--baseline", type=Path, help="optional baseline fixture for byte diff")
     parser.add_argument("--timeout", type=float, default=60.0, help="per-request Ollama call timeout; a cold model load can take ~50s on either host")
@@ -957,7 +1024,7 @@ def main(argv: list[str] | None = None) -> int:
         return run_density(args)
 
     try:
-        profile = parse_profile(args.profile)
+        profile = resolve_profile(args, live=args.adb_push)
     except (OSError, json.JSONDecodeError, ValueError) as error:
         parser.error(f"invalid --profile: {error}")
 

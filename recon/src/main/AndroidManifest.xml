@@ -1,0 +1,16 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ <application android:label="ReconCat" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:allowBackup="false" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:supportsRtl="true">
+  <activity android:name=".ReconActivity" android:exported="true">
+   <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
+  </activity>
+  <!-- Bounded, demo-only adb trigger for tools/ai_mutate.py: no data from the
+       incoming broadcast is used, it only logs this device's own public
+       Build.* fields (see DeviceRecon), and it is a no-op unless the
+       installed build is itself debuggable. ReconCat plays the attacker's
+       recon step; it is intentionally a separate app from lab.purrview so
+       the demo's vulnerable target is never asked to fingerprint itself. -->
+  <receiver android:name=".ReconReceiver" android:exported="true">
+   <intent-filter><action android:name="lab.reconcat.action.DUMP_RECON"/></intent-filter>
+  </receiver>
+ </application>
+</manifest>
