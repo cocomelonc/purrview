@@ -347,6 +347,56 @@ Every other decoder service stays `exported="false"`; this is the one
 deliberate, bounded exception, made so the sweep can drive the phone from
 adb without a human tapping a button between recipes.
 
+### live device recon: ReconCat
+
+The `--profile` shown above (`{"device":"Motorola","arch":"arm64",...}`) can
+be hand-typed, but it does not have to be: `recon/` is a second, standalone
+app, *ReconCat* (`applicationId lab.reconcat`), whose only job is to
+report the device it is installed on. It is deliberately a separate app from
+PurrView rather than a feature bolted onto it - PurrView is this lab's
+vulnerable target, and a demo about attacker recon should not have the
+victim fingerprint itself for its own attacker's tooling.
+
+ReconCat logs only public, permission-free `Build.*` fields - manufacturer,
+model, device, brand, hardware, board, type, `Build.SUPPORTED_ABIS[0]` as
+`arch`, and `Build.VERSION.SDK_INT` as `sdk`. It deliberately excludes
+anything that acts as a persistent device identifier (no `Build.SERIAL`,
+`ANDROID_ID`, IMEI) and anything that is build-machine metadata rather than
+device identity (no `Build.HOST`/`USER`/`FINGERPRINT`/radio version).
+
+Whenever `tools/ai_mutate.py` is already doing a live round-trip to the
+phone (`--sweep`, `--density`, `--adb-push`) and `--profile` was not passed
+explicitly, it triggers ReconCat itself - clears logcat, broadcasts
+`lab.reconcat.action.DUMP_RECON`, and reads the resulting `RECON {...}` line
+back - so the model's context is the real device in front of the audience,
+not a placeholder. If ReconCat is not installed or nothing shows up in
+logcat in time, it falls back to the static placeholder profile instead of
+failing the run.
+
+To install it and see this manually, without going through `ai_mutate.py`
+at all:
+
+```bash
+adb install -r recon/build/outputs/apk/debug/recon-debug.apk   # once, or after a rebuild
+adb shell am start -n lab.reconcat/.ReconActivity
+```
+
+Tap **Dump recon** on screen - the same JSON that would otherwise show up
+silently in `[ai_mutate] profile: live recon from ReconCat (...)`:
+
+![img](./screenshots/2026-09-14_11-10-reconcat.png)
+
+Or trigger the same broadcast headless, exactly like `ai_mutate.py` does
+internally, with no app UI involved:
+
+```bash
+adb logcat -c
+adb shell am broadcast -a lab.reconcat.action.DUMP_RECON -n lab.reconcat/.ReconReceiver
+adb logcat -d -v brief -s ReconCat:I "*:S"
+```
+
+![img](./screenshots/2026-09-14_09-04.png)
+
 #### From a single exact slice to a full 2-D search
 
 `--sweep` does not hold $`W`$ fixed the way `--density` below does. PurrView's own IHDR check rejects anything that is not 8-bit-depth RGBA, so for any recipe the parser is willing to accept at all, the branch it takes is - just as in the density model - a pure function of the pair $`(W,H)`$ through the same truncation:
@@ -616,5 +666,6 @@ logging has a stderr fallback so those tests remain portable.
 - `app/src/main/java/lab/purrview/AiSweepReceiver.java` - the one deliberate, bounded exported component, added so `--sweep` can trigger `PngDecodeService` from adb with no human tapping a button between recipes.
 - `tools/fuzz_purrview_png.c`, `build_purrview_png_fuzzer.sh` - libFuzzer/ASan harness for `parser.c`'s `inspect_png`, drafted with local Ollama and reviewed by hand.
 - `tools/aslr_oracle.py` - external `/proc`-based reader of PurrView's own real, running-process ASLR base (via `adb ... run-as`), cross-checked against the on-device self-check; `--simulate` keeps the old offline toy search for rehearsal without hardware.
+- `recon/` - **ReconCat**, a standalone app (`lab.reconcat`) separate from PurrView, played as the attacker's recon step; `ReconReceiver.java` logs a public, permission-free `Build.*` snapshot on an adb broadcast, which `tools/ai_mutate.py` reads back from logcat as a live `--profile`.
 
 The reference projects and private telemetry remain outside this checkout.
