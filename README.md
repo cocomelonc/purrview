@@ -28,6 +28,42 @@ size and returns `FIXED SAFE`. `Run PoC` takes the vulnerable path. The parser
 is deliberately limited to this fixture; it is not Android's system PNG
 decoder.
 
+### PNG parser: OOB read leak (bounded info-leak primitive)
+
+The same `BUDGET BYPASS` path now also demonstrates a second, independent
+primitive next to the OOB write above: an out-of-bounds *read*. PurrView's
+own harness places a fixed secret, `"meow-meow MCTTP 2026"`, immediately
+after the intentionally-narrow allocation, inside the same single heap
+block. That is PurrView's own construction, not heap grooming, so the leak
+is 100% reproducible on stage regardless of how Android's Scudo allocator
+lays out unrelated chunks. Before the pre-existing OOB write and `SIGABRT`,
+the parser reads back past the boundary it validated (`allocation`) and logs
+whatever it finds there.
+
+This is the "what happens after the crash" half of the talk: the same
+missing bounds check that lets the parser write out-of-bounds just as
+easily lets it read out-of-bounds and disclose whatever PurrView placed
+next to the buffer. It stays fully bounded and local - no heap grooming, no
+cross-chunk reuse, no shellcode/ROP - the class of primitive appropriate for
+an on-stage demo, and the natural next step after the ASLR self-check /
+`aslr_oracle.py` pairing below: a bug that discloses a known value is the
+first building block toward a bug defeating ASLR by itself, instead of an
+external oracle confirming the address from outside.
+
+It triggers on the exact same button as the OOB write above - `PNG -> Run
+PoC` on `purrview-oob.png` (or `Run AI PoC` / `--sweep` on the AI-mutated
+fixture, since the leak lives in the shared `BUDGET BYPASS` path, not in
+either specific fixture). Watch `PurrView/PNG:E` in logcat for the new line
+appearing just before the existing OOB write lines:
+
+![img](./screenshots/2026-09-14_07-34.png)     
+
+The main UI stays alive throughout, exactly like the existing OOB write demo
+- the status card still reads the worker's last published state from before
+the isolated `:png_decoder` process aborted:
+
+![img](./screenshots/2026-09-14_06-25.png)
+
 ### WebP control and historical fixture
 
 The APK vendors libwebp 1.3.1 and calls its real `WebPGetFeatures` and
@@ -478,7 +514,7 @@ logging has a stderr fallback so those tests remain portable.
 - `app/src/main/java/lab/purrview/SmsDecodeService.java` - isolated local PDU worker.
 - `app/src/main/java/lab/purrview/WebpDecodeService.java` - libwebp worker.
 - `app/src/main/java/lab/purrview/JpegDecodeService.java` - libjpeg-turbo worker.
-- `app/src/main/cpp/parser.c` - PNG envelope checks and PurrView OOB/fixed paths.
+- `app/src/main/cpp/parser.c` - PNG envelope checks and PurrView OOB/fixed paths; the `BUDGET BYPASS` path also demonstrates a bounded OOB-read leak of a fixed secret placed next to the narrow allocation.
 - `app/src/main/cpp/sms_parser.c` - local PDU parser and OOB/fixed paths.
 - `app/src/main/cpp/bridge.c` - self-ASLR `dladdr` JNI bridge.
 - `app/src/main/cpp/png_jni.c`, `sms_jni.c` - bounded JNI entry points.

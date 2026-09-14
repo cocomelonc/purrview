@@ -26,6 +26,13 @@ static int fail(char *out, size_t cap, const char *why) {
   return -1;
 }
 
+/* MCTTP 2026 leak demo: a fixed secret PurrView itself places right after the
+   narrow allocation below, so the OOB-read leak stays 100% reproducible on
+   stage regardless of Scudo's chunk layout -- it is PurrView's own harness,
+   not heap grooming, guaranteeing what sits on the other side of the bound
+   the parser failed to check. */
+static const char kPurrLeakSecret[] = "meow-meow MCTTP 2026";
+
 int inspect_png(const uint8_t *d, size_t n, int fixed, char *out, size_t cap) {
   const uint8_t sig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
   if (n < 8 || n > 1048576 || memcmp(d, sig, 8))
@@ -77,8 +84,17 @@ int inspect_png(const uint8_t *d, size_t n, int fixed, char *out, size_t cap) {
   int bypass = accepted && actual > 32768;
   if (bypass && purr_payload != NULL && purr_payload_len >= actual) {
     size_t allocation = checked == 0 ? 1u : (size_t)checked;
-    uint8_t *pixels = (uint8_t *)malloc(allocation);
+    size_t secret_len = sizeof(kPurrLeakSecret);
+    uint8_t *pixels = (uint8_t *)malloc(allocation + secret_len);
     if (pixels == NULL) return fail(out, cap, "PurrView parser allocation failed");
+    memcpy(pixels + allocation, kPurrLeakSecret, secret_len);
+
+    char leak[sizeof(kPurrLeakSecret)];
+    memcpy(leak, pixels + allocation, sizeof(leak));
+    PNG_LOGE("OOB READ | PurrView parser | validated=%zu leaked=%zu bytes past boundary",
+             allocation, sizeof(leak));
+    PNG_LOGE("OOB READ leak: %s", leak);
+
     PNG_LOGE("OOB WRITE | PurrView parser | allocation=%zu copy=%llu source=%zu",
              allocation, (unsigned long long)actual, purr_payload_len);
     PNG_LOGE("memcpy(dst=%p, src=%p, len=%llu) about to cross allocation boundary",
