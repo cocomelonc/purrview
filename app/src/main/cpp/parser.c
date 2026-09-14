@@ -185,6 +185,21 @@ static void hex_encode(const uint8_t *data, size_t len, char *out, size_t cap) {
   out[len * 2] = 0;
 }
 
+/* Printable rendering alongside hex_encode's exact-byte rendering - hex
+   alone is precise but unreadable on stage (see RW READ/WRITE/READBACK);
+   this mirrors the plain-string OOB-read leak above for any bytes that
+   happen to be printable ASCII, substituting '.' for the rest (e.g. the
+   0xAA companion-buffer padding) so it is always safe to log. */
+static void printable_encode(const uint8_t *data, size_t len, char *out, size_t cap) {
+  size_t max = cap - 1;
+  if (len > max) len = max;
+  for (size_t i = 0; i < len; i++) {
+    uint8_t c = data[i];
+    out[i] = (c >= 0x20 && c < 0x7f) ? (char)c : '.';
+  }
+  out[len] = 0;
+}
+
 int inspect_png_rw(const uint8_t *d, size_t n, char *out, size_t cap) {
   uint32_t w, h;
   const uint8_t *purr_payload;
@@ -208,27 +223,32 @@ int inspect_png_rw(const uint8_t *d, size_t n, char *out, size_t cap) {
          PURR_RW_COMPANION_SIZE - sizeof(kPurrLeakSecret));
 
   char before_hex[PURR_RW_COMPANION_SIZE * 2 + 1];
+  char before_text[PURR_RW_COMPANION_SIZE + 1];
   hex_encode(companion + req.read_offset, req.read_len, before_hex, sizeof(before_hex));
-  PNG_LOGE("RW READ | PurrView parser | offset=%u len=%u bytes=%s", req.read_offset,
-           req.read_len, before_hex);
+  printable_encode(companion + req.read_offset, req.read_len, before_text, sizeof(before_text));
+  PNG_LOGE("RW READ | PurrView parser | offset=%u len=%u text=\"%s\" hex=%s", req.read_offset,
+           req.read_len, before_text, before_hex);
 
   memset(companion + req.write_offset, req.write_byte, req.write_len);
-  PNG_LOGE("RW WRITE | PurrView parser | offset=%u len=%u byte=0x%02x", req.write_offset,
-           req.write_len, req.write_byte);
+  PNG_LOGE("RW WRITE | PurrView parser | offset=%u len=%u byte=0x%02x ('%c')", req.write_offset,
+           req.write_len, req.write_byte,
+           (req.write_byte >= 0x20 && req.write_byte < 0x7f) ? (char)req.write_byte : '.');
 
   char after_hex[PURR_RW_COMPANION_SIZE * 2 + 1];
+  char after_text[PURR_RW_COMPANION_SIZE + 1];
   hex_encode(companion + req.read_offset, req.read_len, after_hex, sizeof(after_hex));
-  PNG_LOGE("RW READBACK | PurrView parser | offset=%u len=%u bytes=%s", req.read_offset,
-           req.read_len, after_hex);
+  printable_encode(companion + req.read_offset, req.read_len, after_text, sizeof(after_text));
+  PNG_LOGE("RW READBACK | PurrView parser | offset=%u len=%u text=\"%s\" hex=%s", req.read_offset,
+           req.read_len, after_text, after_hex);
 
   free(buf);
   snprintf(out, cap,
            "RW PRIMITIVE | PurrView parser\n"
-           "read  [off=%u len=%u] -> %s\n"
+           "read  [off=%u len=%u] -> \"%s\"\n"
            "write [off=%u len=%u byte=0x%02x]\n"
-           "read  [off=%u len=%u] -> %s (after write)",
-           req.read_offset, req.read_len, before_hex, req.write_offset, req.write_len,
-           req.write_byte, req.read_offset, req.read_len, after_hex);
+           "read  [off=%u len=%u] -> \"%s\" (after write)",
+           req.read_offset, req.read_len, before_text, req.write_offset, req.write_len,
+           req.write_byte, req.read_offset, req.read_len, after_text);
   return 0;
 }
 
@@ -281,9 +301,11 @@ int inspect_png_rw_file(const uint8_t *d, size_t n, const char *files_dir, char 
     return fail(out, cap, "PurrView parser companion file read failed");
   }
   char before_hex[PURR_RW_COMPANION_SIZE * 2 + 1];
+  char before_text[PURR_RW_COMPANION_SIZE + 1];
   hex_encode(io_buf, req.read_len, before_hex, sizeof(before_hex));
-  PNG_LOGE("RW FILE READ | PurrView parser | path=%s offset=%u len=%u bytes=%s", path,
-           req.read_offset, req.read_len, before_hex);
+  printable_encode(io_buf, req.read_len, before_text, sizeof(before_text));
+  PNG_LOGE("RW FILE READ | PurrView parser | path=%s offset=%u len=%u text=\"%s\" hex=%s", path,
+           req.read_offset, req.read_len, before_text, before_hex);
 
   memset(io_buf, req.write_byte, req.write_len);
   if (fseek(fp, req.write_offset, SEEK_SET) != 0 ||
@@ -292,8 +314,9 @@ int inspect_png_rw_file(const uint8_t *d, size_t n, const char *files_dir, char 
     return fail(out, cap, "PurrView parser companion file write failed");
   }
   fflush(fp);
-  PNG_LOGE("RW FILE WRITE | PurrView parser | path=%s offset=%u len=%u byte=0x%02x", path,
-           req.write_offset, req.write_len, req.write_byte);
+  PNG_LOGE("RW FILE WRITE | PurrView parser | path=%s offset=%u len=%u byte=0x%02x ('%c')", path,
+           req.write_offset, req.write_len, req.write_byte,
+           (req.write_byte >= 0x20 && req.write_byte < 0x7f) ? (char)req.write_byte : '.');
 
   if (fseek(fp, req.read_offset, SEEK_SET) != 0 ||
       fread(io_buf, 1, req.read_len, fp) != req.read_len) {
@@ -302,17 +325,19 @@ int inspect_png_rw_file(const uint8_t *d, size_t n, const char *files_dir, char 
   }
   fclose(fp);
   char after_hex[PURR_RW_COMPANION_SIZE * 2 + 1];
+  char after_text[PURR_RW_COMPANION_SIZE + 1];
   hex_encode(io_buf, req.read_len, after_hex, sizeof(after_hex));
-  PNG_LOGE("RW FILE READBACK | PurrView parser | path=%s offset=%u len=%u bytes=%s", path,
-           req.read_offset, req.read_len, after_hex);
+  printable_encode(io_buf, req.read_len, after_text, sizeof(after_text));
+  PNG_LOGE("RW FILE READBACK | PurrView parser | path=%s offset=%u len=%u text=\"%s\" hex=%s", path,
+           req.read_offset, req.read_len, after_text, after_hex);
 
   snprintf(out, cap,
            "RW PRIMITIVE (file) | PurrView parser\n"
            "path  %s\n"
-           "read  [off=%u len=%u] -> %s\n"
+           "read  [off=%u len=%u] -> \"%s\"\n"
            "write [off=%u len=%u byte=0x%02x]\n"
-           "read  [off=%u len=%u] -> %s (after write)",
-           path, req.read_offset, req.read_len, before_hex, req.write_offset, req.write_len,
-           req.write_byte, req.read_offset, req.read_len, after_hex);
+           "read  [off=%u len=%u] -> \"%s\" (after write)",
+           path, req.read_offset, req.read_len, before_text, req.write_offset, req.write_len,
+           req.write_byte, req.read_offset, req.read_len, after_text);
   return 0;
 }

@@ -108,11 +108,7 @@ Tap **R/W PoC (memory)** on screen, then read the result back:
 adb logcat -d -v brief -s "PurrView/PNG:I" "PurrView/PNG:E" "*:S"
 ```
 
-```
-E/PurrView/PNG(16875): RW READ | PurrView parser | offset=0 len=21 bytes=6d656f772d6d656f77204d43545450203230323600
-E/PurrView/PNG(16875): RW WRITE | PurrView parser | offset=0 len=4 byte=0x41
-E/PurrView/PNG(16875): RW READBACK | PurrView parser | offset=0 len=21 bytes=414141412d6d656f77204d43545450203230323600
-```
+![img](./screenshots/2026-09-14_10-47.png)        
 
 Decoding the hex: the first read is `meow-meow MCTTP 2026\0` - the same
 secret as the leak demo, but now reached through an attacker-chosen offset
@@ -131,11 +127,7 @@ Tap **R/W PoC (file)** on screen:
 adb logcat -d -v brief -s "PurrView/PNG:I" "PurrView/PNG:E" "*:S"
 ```
 
-```
-E/PurrView/PNG(16875): RW FILE READ | PurrView parser | path=/data/user/0/lab.purrview/files/purrview-rw-companion.bin offset=0 len=21 bytes=6d656f772d6d656f77204d43545450203230323600
-E/PurrView/PNG(16875): RW FILE WRITE | PurrView parser | path=/data/user/0/lab.purrview/files/purrview-rw-companion.bin offset=0 len=4 byte=0x41
-E/PurrView/PNG(16875): RW FILE READBACK | PurrView parser | path=/data/user/0/lab.purrview/files/purrview-rw-companion.bin offset=0 len=21 bytes=414141412d6d656f77204d43545450203230323600
-```
+![img](./screenshots/2026-09-14_10-46.png)     
 
 Identical read/write/read-back to the memory version - the difference is
 that this write outlives the worker process. Prove it from outside the
@@ -146,13 +138,7 @@ section above, reading the file no logcat line is required for:
 adb shell 'run-as lab.purrview sh -c "ls -la files/; xxd files/purrview-rw-companion.bin 2>/dev/null || od -An -tx1 files/purrview-rw-companion.bin"'
 ```
 
-```
--rw------- 1 u0_a244 u0_a244    64 2026-09-14 11:31 purrview-rw-companion.bin
-00000000: 4141 4141 2d6d 656f 7720 4d43 5454 5020  AAAA-meow MCTTP 
-00000010: 3230 3236 00aa aaaa aaaa aaaa aaaa aaaa  2026............
-00000020: aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa  ................
-00000030: aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa  ................
-```
+![img](./screenshots/2026-09-14_10-49.png)     
 
 The `AAAA` the write placed is sitting on disk, in PurrView's own sandbox,
 padded with the deterministic `0xAA` filler that marks "never written by
