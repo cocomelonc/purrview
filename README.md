@@ -311,6 +311,56 @@ Every other decoder service stays `exported="false"`; this is the one
 deliberate, bounded exception, made so the sweep can drive the phone from
 adb without a human tapping a button between recipes.
 
+### bypass-density model: exact probability, validated live
+
+`--density N` is a different kind of demo: instead of hunting for a crash,
+it derives an exact probability for one and then checks that prediction
+against N live draws on the real device.
+
+The PurrView PNG worker's defect is a clean modular-arithmetic bug:
+`checked = actual mod 65536`, where `actual = 4 * width * height`. Holding
+`width` fixed, `height` walks `checked` through an arithmetic progression
+with a known period, so the fraction of heights that land on the
+`OOB_WRITE` branch is not an estimate - it is computed exactly by
+enumerating every reachable height (the range is always small, bounded by
+`MAX_FIXTURE`), with no approximation and no model output involved:
+
+```sh
+python3 tools/ai_mutate.py --density 20 --no-remote --serial ZY22K5H4KQ
+```
+
+![img](./screenshots/2026-09-14_05-33.png)     
+
+![img](./screenshots/2026-09-14_06-00.png)    
+
+By default `--density` alternates every iteration between two arms drawing
+`height` from the same range: `uniform` (true `random.randint`, the
+statistical baseline) and `ollama` (the model chooses, still bounded to the
+same range). Each iteration prints the running expected count for its arm
+(`E[OOB_WRITE so far] = draws * p`) *before* the device responds, then the
+real outcome from logcat and whether it matched the closed-form prediction
+- across every run so far every single draw has matched, because the
+branch a given height takes is fully determined by the formula above, not
+a coin flip; only *which heights get tried* is random. `--density-source
+uniform` or `--density-source ollama` locks a run to one arm; `--density-width`
+picks a different fixed width (default 128, matching the PoC's own
+128x128 example).
+
+The two arms exist to compare a model's choices against true randomness,
+and the first attempt at this surfaced a real, worth-keeping finding: the
+schema example in the model's prompt originally hardcoded `{"height":128}`
+(the range's midpoint, which for width=128 happens to equal the width
+itself) - `qwen3:1.7b` copied that literal example on every single call
+regardless of temperature, picking height=128 four times in a row. The fix
+was to randomize the schema's illustrative number on every call so it can
+never become a repeatable anchor (`prompt_for_height()` in
+`tools/ai_mutate.py`). After the fix the model's heights are genuinely
+distinct call to call, though they still cluster somewhat above the width
+rather than spreading uniformly across the full range - a softer, honest
+sampling bias worth mentioning on stage in its own right: even a
+"randomly" prompted small local model does not sample like `random.randint`
+does, and that gap is now something this tool can measure, not just assert.
+
 Check worker isolation without root:
 
 ```sh
@@ -434,7 +484,7 @@ logging has a stderr fallback so those tests remain portable.
 - `app/src/main/cpp/png_jni.c`, `sms_jni.c` - bounded JNI entry points.
 - `app/src/main/cpp/jpeg_bridge.c`, `webp_bridge.c` - native codec bridges.
 - `tools/generate_samples.py` - deterministic `purrview-oob.png` and `purrview-pdu.bin` generation.
-- `tools/ai_mutate.py` - bounded Ollama/fallback recipe selection, deterministic fixture builder, diff manifest and optional `adb push`; `--sweep N` drives N live recipes against a real device via `AiSweepReceiver` and classifies each from logcat.
+- `tools/ai_mutate.py` - bounded Ollama/fallback recipe selection, deterministic fixture builder, diff manifest and optional `adb push`; `--sweep N` drives N live recipes against a real device via `AiSweepReceiver` and classifies each from logcat; `--density N` derives the PNG worker's exact bypass probability and validates it against N live device draws, comparing a true-random arm against an Ollama-chosen arm.
 - `app/src/main/java/lab/purrview/AiSweepReceiver.java` - the one deliberate, bounded exported component, added so `--sweep` can trigger `PngDecodeService` from adb with no human tapping a button between recipes.
 - `tools/fuzz_purrview_png.c`, `build_purrview_png_fuzzer.sh` - libFuzzer/ASan harness for `parser.c`'s `inspect_png`, drafted with local Ollama and reviewed by hand.
 - `tools/aslr_oracle.py` - external `/proc`-based reader of PurrView's own real, running-process ASLR base (via `adb ... run-as`), cross-checked against the on-device self-check; `--simulate` keeps the old offline toy search for rehearsal without hardware.

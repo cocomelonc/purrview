@@ -22,6 +22,7 @@ import contextlib
 import hashlib
 import json
 import os
+import random
 import re
 import socket
 import struct
@@ -31,6 +32,7 @@ import time
 import urllib.error
 import urllib.request
 import zlib
+from fractions import Fraction
 from pathlib import Path
 from typing import Any, Iterator, Mapping
 
@@ -626,6 +628,276 @@ def run_sweep(args: argparse.Namespace) -> int:
     return 0
 
 
+def png_actual_bytes(width: int, height: int) -> int:
+    return 4 * width * height
+
+
+def png_predicted_outcome(width: int, height: int) -> str:
+    """Replicate parser.c's inspect_png() branch selection exactly (fixed=0).
+
+    Mirrors: checked = (uint16_t)actual; accepted = checked<=32768;
+    bypass = accepted && actual>32768. build_png() always attaches a pCAT
+    payload of exactly `actual` bytes, so the C code's extra
+    `purr_payload_len >= actual` guard on the bypass branch is always
+    satisfied here and is not modelled separately.
+    """
+    actual = png_actual_bytes(width, height)
+    checked = actual & 0xFFFF
+    accepted = checked <= 32768
+    bypass = accepted and actual > 32768
+    if bypass:
+        return "OOB_WRITE"
+    if accepted:
+        return "CONTROL"
+    return "REJECTED"
+
+
+def density_fixture_overhead(width: int) -> int:
+    """Bytes of constant PNG framing around the pCAT payload for this width.
+
+    Only the pCAT chunk's payload length scales with `actual` (= height);
+    the signature, IHDR, IDAT and IEND chunks do not, so this is the same
+    for every height at a fixed width.
+    """
+    probe = build_png({
+        "kind": "png", "width": width, "height": 1, "channels": 4,
+        "bit_depth": 8, "pattern": "zero", "seed": 0, "crc": "valid",
+    })
+    return len(probe) - png_actual_bytes(width, 1)
+
+
+def density_height_range(width: int) -> tuple[int, int]:
+    """The [1, h_max] band of heights whose fixture stays within MAX_FIXTURE."""
+    overhead = density_fixture_overhead(width)
+    h_max = (MAX_FIXTURE - overhead) // (4 * width)
+    return 1, max(h_max, 1)
+
+
+def density_exact_probability(width: int, h_lo: int, h_hi: int) -> dict[str, Any]:
+    """Exact outcome distribution for a height drawn uniformly from
+    [h_lo, h_hi]. The range is always small enough (MAX_FIXTURE-bounded)
+    that every height is enumerated directly - this is an exact rational
+    count, not a Monte Carlo estimate.
+    """
+    counts = {"OOB_WRITE": 0, "CONTROL": 0, "REJECTED": 0}
+    for h in range(h_lo, h_hi + 1):
+        counts[png_predicted_outcome(width, h)] += 1
+    total = h_hi - h_lo + 1
+    return {
+        "width": width,
+        "height_range": [h_lo, h_hi],
+        "total_heights": total,
+        "counts": counts,
+        "p_oob_write": Fraction(counts["OOB_WRITE"], total),
+    }
+
+
+def prompt_for_height(
+    width: int, h_lo: int, h_hi: int, profile: Mapping[str, Any], extra: str, example_height: int,
+) -> str:
+    # example_height is deliberately re-randomized on every call: an earlier
+    # version hardcoded the schema's example to (h_lo+h_hi)//2, which for
+    # width=128's range happened to equal 128 - the model then copied that
+    # literal example instead of sampling, picking height=128 on every
+    # single call regardless of temperature or the anti-repeat instruction.
+    # A fixed illustrative number in a schema is itself an anchor.
+    return (
+        "You are choosing one PNG height for a bounded memory-safety test "
+        f"fixture. Return JSON only, matching this schema (the number below "
+        f"is only illustrating the shape, not a suggested value - do not "
+        f"reuse it): "
+        f'{{"height":{example_height}}} '
+        f"The width is fixed at {width} and is not yours to choose. Pick a "
+        f"single integer height, chosen as if uniformly at random, from the "
+        f"inclusive range {h_lo}..{h_hi} - avoid gravitating to round "
+        f"numbers, the midpoint, or the width's own value ({width}). "
+        "Do not output C, assembly, shellcode, ROP, syscalls, commands, "
+        "URLs, file paths, network actions, or executable content. "
+        f"Device profile (informational only): {json.dumps(profile, sort_keys=True)}"
+        f"{extra}"
+    )
+
+
+def resolve_height(
+    width: int, h_lo: int, h_hi: int, profile: Mapping[str, Any], args: argparse.Namespace,
+    extra_prompt: str, ollama_seed: int, rng: random.Random,
+) -> tuple[int | None, str, str | None]:
+    """Same remote-then-local Ollama order as resolve_recipe(), but for the
+    density mode's much smaller {"height": int} schema."""
+    # A fresh decoy example each call, well clear of both the width value and
+    # the range midpoint, so the schema's illustrative number never becomes
+    # a repeatable anchor by accident.
+    example_height = rng.randint(h_lo, h_hi)
+    while example_height in (width, (h_lo + h_hi) // 2):
+        example_height = rng.randint(h_lo, h_hi)
+    prompt = prompt_for_height(width, h_lo, h_hi, profile, extra_prompt, example_height)
+    stages: list[tuple[str, str]] = []
+    if not args.no_remote:
+        stages.append(("ollama-remote", args.remote_model))
+    stages.append(("ollama-local", args.local_model))
+    for source, model in stages:
+        try:
+            if source == "ollama-remote":
+                bind_host = args.remote_bind_host or default_remote_bind_host(args.remote_ssh)
+                with ssh_tunnel(args.remote_ssh, bind_host, args.remote_port, args.tunnel_port, args.ssh_timeout):
+                    raw = call_ollama(
+                        f"http://127.0.0.1:{args.tunnel_port}", model, prompt, args.timeout,
+                        temperature=1.1, seed=ollama_seed,
+                    )
+            else:
+                raw = call_ollama(
+                    args.local_endpoint, model, prompt, args.timeout,
+                    temperature=1.1, seed=ollama_seed,
+                )
+            if not isinstance(raw, Mapping) or set(raw) - {"height"}:
+                raise RecipeError("model response must be a JSON object with only a 'height' field")
+            height = raw.get("height")
+            if isinstance(height, bool) or not isinstance(height, int) or not h_lo <= height <= h_hi:
+                raise RecipeError(f"height must be an integer in {h_lo}..{h_hi}")
+            return height, source, model
+        except (RuntimeError, RecipeError) as error:
+            print(f"[ai_mutate] {source} ({model}) failed: {error}", file=sys.stderr)
+    return None, "deterministic-fallback", None
+
+
+def run_density(args: argparse.Namespace) -> int:
+    """Bypass-density mode: derive the exact P(OOB_WRITE) for height drawn
+    uniformly at a fixed width, then validate it against N live draws on the
+    real device, alternating between a true-uniform-random arm and an
+    Ollama-chosen arm so the two empirical rates can be compared.
+    """
+    width = args.density_width
+    h_lo, h_hi = density_height_range(width)
+    model_stats = density_exact_probability(width, h_lo, h_hi)
+    period = 65536 // (4 * width) if (4 * width) <= 65536 else None
+    p = model_stats["p_oob_write"]
+
+    density_dir = DEFAULT_OUTPUT / "density" / time.strftime("%Y%m%d-%H%M%S")
+    density_dir.mkdir(parents=True, exist_ok=True)
+
+    print(f"[ai_mutate] bypass-density model: width={width} (fixed), height in "
+          f"[{h_lo},{h_hi}] ({model_stats['total_heights']} values"
+          + (f", period={period}" if period else "") + ")")
+    print(f"[ai_mutate] exact P(OOB_WRITE) = {model_stats['counts']['OOB_WRITE']}/"
+          f"{model_stats['total_heights']} = {p} ~= {float(p):.4f}")
+    print(f"[ai_mutate] exact breakdown: CONTROL={model_stats['counts']['CONTROL']} "
+          f"OOB_WRITE={model_stats['counts']['OOB_WRITE']} REJECTED={model_stats['counts']['REJECTED']}")
+    print(f"[ai_mutate] artifacts under {density_dir}")
+
+    try:
+        profile = parse_profile(args.profile)
+    except (OSError, json.JSONDecodeError, ValueError) as error:
+        print(f"[ai_mutate] invalid --profile: {error}", file=sys.stderr)
+        return 2
+
+    arm_state = {
+        "uniform": {"draws": 0, "observed_oob": 0},
+        "ollama": {"draws": 0, "observed_oob": 0},
+    }
+    history: list[dict[str, Any]] = []
+    interrupted = False
+    rng = random.Random()
+
+    try:
+        for i in range(1, args.density + 1):
+            if args.density_source == "alternate":
+                arm = "uniform" if i % 2 == 1 else "ollama"
+            else:
+                arm = args.density_source
+
+            model_used: str | None = None
+            if arm == "uniform":
+                height = rng.randint(h_lo, h_hi)
+                source = "uniform-random"
+            else:
+                avoid = ""
+                recent = [entry["height"] for entry in history if entry["arm"] == "ollama"][-5:]
+                if recent:
+                    avoid = f" Heights already tried this run, avoid repeating: {recent}"
+                height, source, model_used = resolve_height(
+                    width, h_lo, h_hi, profile, args, avoid, ollama_seed=3000 + i, rng=rng,
+                )
+                if height is None:
+                    height = rng.randint(h_lo, h_hi)
+                    source = "deterministic-fallback"
+
+            predicted = png_predicted_outcome(width, height)
+            state = arm_state[arm]
+            expected_before = state["draws"] * float(p)
+
+            recipe = {
+                "kind": "png", "width": width, "height": height, "channels": 4,
+                "bit_depth": 8, "pattern": "affine", "seed": (i * 7) & 0xFF, "crc": "valid",
+            }
+            data = build_png(recipe)
+            fixture_path = density_dir / f"{i:03d}.png"
+            fixture_path.write_bytes(data)
+
+            print(f"[density {i}/{args.density}] arm={arm} source={source} model={model_used or '-'} "
+                  f"height={height} actual={png_actual_bytes(width, height)} predicted={predicted}")
+            print(f"             E[OOB_WRITE so far | arm={arm}] = {state['draws']} * {float(p):.4f} "
+                  f"= {expected_before:.2f}; observed so far = {state['observed_oob']}")
+
+            try:
+                clear_sweep_log(args.serial)
+                push_to_device(fixture_path, args.serial, "purrview-ai.png")
+                trigger_sweep_worker(args.serial)
+                outcome, evidence = poll_sweep_outcome(args.serial, args.density_timeout)
+            except (OSError, subprocess.CalledProcessError) as error:
+                outcome, evidence = "TIMEOUT", f"adb error: {error}"
+
+            if outcome == predicted:
+                match = "MATCH"
+            elif outcome == "TIMEOUT":
+                match = "TIMEOUT"
+            else:
+                match = "MISMATCH"
+            print(f"             device: {outcome}{' | ' + evidence if evidence else ''}  [{match} vs predicted]")
+
+            state["draws"] += 1
+            if outcome == "OOB_WRITE":
+                state["observed_oob"] += 1
+
+            entry = {
+                "iteration": i, "arm": arm, "source": source, "model": model_used,
+                "width": width, "height": height, "predicted": predicted, "outcome": outcome,
+                "match": match, "evidence": evidence,
+                "fixture": {"path": str(fixture_path.resolve()), "sha256": hashlib.sha256(data).hexdigest()},
+            }
+            history.append(entry)
+            (density_dir / f"{i:03d}.png.json").write_text(json.dumps(entry, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+            if i < args.density:
+                time.sleep(args.density_delay)
+    except KeyboardInterrupt:
+        interrupted = True
+        print("[ai_mutate] density run interrupted by user", file=sys.stderr)
+
+    for arm, state in arm_state.items():
+        if state["draws"] == 0:
+            continue
+        rate = state["observed_oob"] / state["draws"]
+        print(f"[ai_mutate] arm={arm}: {state['observed_oob']}/{state['draws']} OOB_WRITE "
+              f"(empirical rate={rate:.4f}) vs exact model p={float(p):.4f}")
+
+    mismatches = sum(1 for entry in history if entry["match"] == "MISMATCH")
+    summary = {
+        "requested": args.density, "completed": len(history), "interrupted": interrupted,
+        "width": width, "height_range": [h_lo, h_hi],
+        "exact_model": {
+            "p_oob_write_fraction": str(p), "p_oob_write_float": float(p),
+            "counts": model_stats["counts"], "total_heights": model_stats["total_heights"],
+        },
+        "arms": arm_state, "model_mismatches": mismatches, "history": history,
+    }
+    summary_path = density_dir / "summary.json"
+    summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"[ai_mutate] density run done: {len(history)}/{args.density} run, "
+          f"{mismatches} model mismatch(es) against the real device (excluding timeouts)")
+    print(f"[ai_mutate] summary: {summary_path.resolve()}")
+    return 0
+
+
 def parse_profile(value: str) -> Mapping[str, Any]:
     path = Path(value)
     text = path.read_text(encoding="utf-8") if path.is_file() else value
@@ -665,11 +937,24 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--sweep-delay", type=float, default=1.5, help="seconds to pause between sweep iterations")
     parser.add_argument("--sweep-timeout", type=float, default=4.0,
                          help="seconds to wait for a sweep iteration's outcome in logcat before marking it TIMEOUT")
+    parser.add_argument("--density", type=int, default=0, metavar="N",
+                         help="run N live height draws at a fixed width against a real device instead of "
+                              "the single-shot flow, to validate the parser's exact bypass-probability model "
+                              "(see run_density); alternates a true-uniform-random arm with an Ollama-chosen arm")
+    parser.add_argument("--density-width", type=int, default=128,
+                         help="fixed PNG width for --density (height is the only free variable)")
+    parser.add_argument("--density-source", choices=("alternate", "uniform", "ollama"), default="alternate",
+                         help="which arm every --density draw uses (default: alternate odd/even iterations)")
+    parser.add_argument("--density-delay", type=float, default=1.0, help="seconds to pause between density iterations")
+    parser.add_argument("--density-timeout", type=float, default=4.0,
+                         help="seconds to wait for a density iteration's outcome in logcat before marking it TIMEOUT")
     args = parser.parse_args(argv)
     if args.adb_push and args.kind != "png":
         parser.error("--adb-push currently supports the PurrView PNG worker only")
     if args.sweep > 0:
         return run_sweep(args)
+    if args.density > 0:
+        return run_density(args)
 
     try:
         profile = parse_profile(args.profile)
