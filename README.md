@@ -778,6 +778,119 @@ MAX_TOTAL_TIME=30 ./tools/build_purrview_png_fuzzer.sh
 A minute of local mutation from the one-fixture seed corpus is enough to
 rediscover the same overflow without being told where it is.
 
+## AI-assisted method selection (validation agent)
+
+The tools above each run one fixed check. `tools/purr_agent.py` is the layer
+above them: instead of a single hard-coded probe it exposes a *registry* of
+bounded validation methods across three areas - exploitability, ASLR, and the
+read/write primitive - and lets a model choose, from a closed allow-list,
+which `method_id` to run next and with which (also allow-listed) parameters.
+This is the strategy layer, not another text mutator: the agent picks a
+verification method, compares independent evidence sources, and adapts the
+next step to what it has already seen.
+
+Every method in the registry carries the same metadata (`--list` prints it
+all as JSON): `method_id`, `area`, `prerequisites`, estimated `cost_s` and
+`timeout_s`, the `evidence` type it yields, a `risk` level, and its
+success/uncertainty criteria. The methods are:
+
+* **exploitability** - `canary_readback` (OOB read discloses the known
+  post-buffer secret), `boundary_probing` (locate the CONTROL->OOB_WRITE
+  height boundary), `crash_reproducibility` (repeat the abort),
+  `controlled_state_impact` (bounded write changes exactly its window),
+  `restart_stability` (main UI survives a worker abort);
+* **aslr** - `maps_vs_dladdr` (external `/proc/maps` base vs the app's own
+  dladdr self-check), `maps_snapshot` (single base read), `repeated_launch`
+  (base distribution across relaunches), `crash_artifact_correlation`
+  (deliberately weak, so the planner has something to skip);
+* **rw** - `bounded_memory_canary`, `file_canary`, `offset_length_boundary`
+  (windows accepted up to and rejected past the 64-byte companion buffer),
+  `repeatability`.
+
+One entry point runs the whole loop: **plan** (the model returns only a JSON
+selection) -> **run** the bounded method -> collect typed evidence -> if the
+area is still inconclusive and budget remains, **plan the next method** -> ...
+-> **final per-area verdict and overall score**. The model never emits code,
+payloads, offsets outside the fixed buffers, commands, URLs, or addresses - it
+returns exactly this shape, validated against the registry before anything
+runs (anything outside the allow-list is dropped and a deterministic
+rule-based planner takes over, the same way `ai_mutate.py` falls back on a
+recipe):
+
+```json
+{"select": [{"area": "aslr", "method_id": "maps_vs_dladdr"},
+            {"area": "exploitability", "method_id": "canary_readback"}],
+ "skip":   [{"method_id": "restart_stability",
+             "reason": "unnecessary after deterministic replay"}],
+ "reason": "cross-check runtime base before bounded validation",
+ "confidence": 0.82}
+```
+
+The run shows not just the result but the model's decision each round - what
+it selected, what it skipped and why, and its confidence:
+
+```
+== round 1 == [ollama-local:llama3.2:3b]
+AI selected: maps_vs_dladdr
+Skipped: restart_stability — no direct evidence for stability impact
+Skipped: crash_artifact_correlation — artifact correlation alone is insufficient
+Reason: direct evidence preferred, skipping methods without direct impact
+Confidence: 0.82
+  -> maps_vs_dladdr [base_agreement/live]: inconclusive (conf=0.25) — need both
+     the external /proc/maps read and the app's dladdr self-check
+```
+
+Two modes. `--simulate` (default) needs no device: every method returns
+honest, deterministic evidence derived from PurrView's *own* construction -
+the fixed leak secret, the exact bypass-probability model, the toy ASLR
+search - the same basis `aslr_oracle.py --simulate` and `ai_mutate.py
+--density` already use, so it rehearses offline and is unit-tested.
+
+```sh
+# offline rehearsal, deterministic rule-based planner (no model, no device):
+python3 tools/purr_agent.py --simulate --offline
+
+# offline, but let a local Ollama model drive the selection:
+python3 tools/purr_agent.py --simulate --no-remote --local-model llama3.2:3b
+```
+
+`--live` wires the methods to a real device over the same adb/logcat/oracle
+paths the other tools use. The exploitability OOB methods reuse
+`AiSweepReceiver`; the ASLR self-check and the read/write primitive are driven
+by a second bounded, debuggable-only receiver, `LabControlReceiver`, added so
+the agent can trigger them from adb with no human tapping a button. It takes no
+arbitrary path, offset or payload from the broadcast - `ASLR_SELFCHECK` runs
+the same `dladdr()` self-report the button runs (in the main process, logging
+`PurrView/ASLR`), and `RW_START` starts the R/W worker against PurrView's own
+already-private `files/purrview-rw.png` with a target constrained to exactly
+`memory` or `file`. The two host-side checks (`offset_length_boundary`,
+`repeatability`) stay model-derived and say so. Launch PurrView first so its
+process and `libpurrview.so` mapping exist:
+
+```sh
+adb shell monkey -p lab.purrview -c android.intent.category.LAUNCHER 1
+python3 tools/purr_agent.py --live --no-remote --local-model llama3.2:3b \
+        --serial <device> --timeout 90
+```
+
+On the Motorola every area then reaches a conclusion on real device evidence
+(`simulated: false`), overall score 0.93:
+
+* **exploitability** - `canary_readback` fires the on-device OOB read and
+  discloses `meow-meow MCTTP 2026`, matching the `E/PurrView/PNG: OOB READ
+  leak: meow-meow MCTTP 2026` line in logcat;
+* **aslr** - `maps_vs_dladdr` broadcasts the self-check, then reads the same
+  pid's `/proc/<pid>/maps`: the app's own dladdr base and the external reader
+  agree on `0x782eed2000` - two independent readers, one real randomized base;
+* **rw** - `bounded_memory_canary` pushes an R/W fixture and reads the device's
+  own `RW READBACK` line: the companion window that read back `6d656f77`
+  (`meow`) reads back `41414141` after the bounded write (`file_canary` does
+  the same against `RW FILE READBACK`).
+
+Every run writes a `report.json` (per-round plan source, each evidence record
+with its `simulated` flag, per-area verdicts, overall score) under
+`build/agent/<timestamp>/`.
+
 ## Build and tests
 
 The checkout uses Android Gradle Plugin/Gradle 8.10, JDK 17, NDK
@@ -805,9 +918,11 @@ logging has a stderr fallback so those tests remain portable.
 - `app/src/main/cpp/jpeg_bridge.c`, `webp_bridge.c` - native codec bridges.
 - `tools/generate_samples.py` - deterministic `purrview-oob.png` and `purrview-pdu.bin` generation.
 - `tools/ai_mutate.py` - bounded Ollama/fallback recipe selection, deterministic fixture builder, diff manifest and optional `adb push`; `--sweep N` drives N live recipes against a real device via `AiSweepReceiver` and classifies each from logcat; `--density N` derives the PNG worker's exact bypass probability and validates it against N live device draws, comparing a true-random arm against an Ollama-chosen arm.
-- `app/src/main/java/lab/purrview/AiSweepReceiver.java` - the one deliberate, bounded exported component, added so `--sweep` can trigger `PngDecodeService` from adb with no human tapping a button between recipes.
+- `app/src/main/java/lab/purrview/AiSweepReceiver.java` - a deliberate, bounded exported component, added so `--sweep` can trigger `PngDecodeService` from adb with no human tapping a button between recipes.
+- `app/src/main/java/lab/purrview/LabControlReceiver.java` - a second bounded, debuggable-only exported receiver for `tools/purr_agent.py`'s live methods: `ASLR_SELFCHECK` runs the `dladdr` self-report in the main process (so `maps_vs_dladdr` can cross-check it), and `RW_START` runs the read/write primitive against the already-private `files/purrview-rw.png` (target constrained to `memory`/`file`); neither takes an arbitrary path/offset/payload from the broadcast.
 - `tools/fuzz_purrview_png.c`, `build_purrview_png_fuzzer.sh` - libFuzzer/ASan harness for `parser.c`'s `inspect_png`, drafted with local Ollama and reviewed by hand.
 - `tools/aslr_oracle.py` - external `/proc`-based reader of PurrView's own real, running-process ASLR base (via `adb ... run-as`), cross-checked against the on-device self-check; `--simulate` keeps the old offline toy search for rehearsal without hardware.
+- `tools/purr_agent.py` - the AI-assisted method-selection agent: a registry of bounded validation methods across exploitability/ASLR/rw (each with prerequisites, cost/timeout, evidence type, risk and success criteria), a model that selects only `method_id` + allow-listed params, and a plan->run->re-plan loop that emits per-area verdicts and an overall score; `--simulate` (default) is offline and deterministic, `--live` wires the exploitability, ASLR and read/write methods to a real device (via `AiSweepReceiver` and `LabControlReceiver`), and reuses `ai_mutate.py`/`aslr_oracle.py` plumbing.
 - `recon/` - **ReconCat**, a standalone app (`lab.reconcat`) separate from PurrView, played as the attacker's recon step; `ReconReceiver.java` logs a public, permission-free `Build.*` snapshot on an adb broadcast, which `tools/ai_mutate.py` reads back from logcat as a live `--profile`.
 
 The reference projects and private telemetry remain outside this checkout.

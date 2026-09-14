@@ -185,3 +185,5 @@
 87	144	1789367154184517761	/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/libpurrview.so	a46efa22540d97aa
 2	38	1789371895827940818	CMakeFiles/purrview.dir/parser.c.o	2a0f14451493e640
 38	58	1789371895844607485	/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/libpurrview.so	a46efa22540d97aa
+6	109	1789393558701090122	CMakeFiles/purrview.dir/bridge.c.o	52ef898b9f000546
+109	168	1789393558761090123	/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/arm64-v8a/libpurrview.so	a46efa22540d97aa

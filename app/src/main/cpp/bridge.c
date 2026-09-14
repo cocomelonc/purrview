@@ -12,9 +12,11 @@
 
 static void purrview_aslr_anchor(void) {}
 
-JNIEXPORT jstring JNICALL
-Java_lab_purrview_MainActivity_selfAslr(JNIEnv *env, jobject self) {
-  (void)self;
+/* Shared dladdr() self-report used by both the MainActivity button and the
+ * bounded LabControlReceiver broadcast trigger (tools/purr_agent.py). It reads
+ * only this library's own load address and always logs the PurrView/ASLR line;
+ * it takes nothing from the caller, so both entry points are identical. */
+static jstring purrview_self_aslr(JNIEnv *env) {
   Dl_info info;
   if (dladdr((void *)purrview_aslr_anchor, &info) == 0 || info.dli_fbase == NULL) {
     return (*env)->NewStringUTF(env, "ASLR SELF | module lookup failed");
@@ -36,6 +38,18 @@ Java_lab_purrview_MainActivity_selfAslr(JNIEnv *env, jobject self) {
             (unsigned long long)base, (unsigned long long)symbol,
             (unsigned long long)slide);
   return (*env)->NewStringUTF(env, result);
+}
+
+JNIEXPORT jstring JNICALL
+Java_lab_purrview_MainActivity_selfAslr(JNIEnv *env, jobject self) {
+  (void)self;
+  return purrview_self_aslr(env);
+}
+
+JNIEXPORT jstring JNICALL
+Java_lab_purrview_LabControlReceiver_selfAslr(JNIEnv *env, jobject self) {
+  (void)self;
+  return purrview_self_aslr(env);
 }
 
 JNIEXPORT jstring JNICALL

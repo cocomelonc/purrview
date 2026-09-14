@@ -27,5 +27,17 @@
   <receiver android:name=".AiSweepReceiver" android:exported="true">
    <intent-filter><action android:name="lab.purrview.action.AI_SWEEP_START"/></intent-filter>
   </receiver>
+  <!-- Bounded, demo-only triggers for tools/purr_agent.py's live methods: the
+       ASLR self-check (logs PurrView/ASLR from the main process) and the R/W
+       primitive against the already-private files/purrview-rw.png. Neither
+       takes an arbitrary path/offset/payload from the broadcast, and both are
+       a no-op unless the installed build is itself debuggable (see
+       LabControlReceiver). -->
+  <receiver android:name=".LabControlReceiver" android:exported="true">
+   <intent-filter>
+    <action android:name="lab.purrview.action.ASLR_SELFCHECK"/>
+    <action android:name="lab.purrview.action.RW_START"/>
+   </intent-filter>
+  </receiver>
  </application>
 </manifest>
