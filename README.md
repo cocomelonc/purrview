@@ -304,14 +304,16 @@ python3 tools/ai_mutate.py --kind png --target oob \
 By default the script tries three sources in order and records which one
 answered in the manifest's `source` field:
 
-1. **Remote rehearsal host** (`qwen3:14b` on `cocomelonc@10.10.10.95`, reached
+**Remote rehearsal host** (`qwen3:14b` on `cocomelonc@10.10.10.95`, reached
    over an on-demand SSH tunnel - the host only binds Ollama to its own LAN
    address, so the tunnel forwards there rather than to `127.0.0.1`). This is
-   the fastest and most reliable path when that host is reachable.
-2. **Local Ollama** (`qwen3:1.7b`, CPU-only) if the remote host is unreachable
+   the fastest and most reliable path when that host is reachable.      
+
+**Local Ollama** (`qwen3:1.7b`, CPU-only) if the remote host is unreachable
    or the SSH tunnel fails. This laptop has no GPU, so keep the local model
-   small; CPU inference is also noticeably slower under memory pressure.
-3. **Deterministic fallback** if both Ollama attempts fail or return a
+   small; CPU inference is also noticeably slower under memory pressure.       
+
+**Deterministic fallback** if both Ollama attempts fail or return a
    recipe outside the allow-list.
 
 A cold model load can take up to a minute on either host, which is why
@@ -854,6 +856,8 @@ python3 tools/purr_agent.py --simulate --offline
 python3 tools/purr_agent.py --simulate --no-remote --local-model llama3.2:3b
 ```
 
+![img](./screenshots/2026-09-14_17-02.png)     
+
 `--live` wires the methods to a real device over the same adb/logcat/oracle
 paths the other tools use. The exploitability OOB methods reuse
 `AiSweepReceiver`; the ASLR self-check and the read/write primitive are driven
@@ -872,6 +876,12 @@ adb shell monkey -p lab.purrview -c android.intent.category.LAUNCHER 1
 python3 tools/purr_agent.py --live --no-remote --local-model llama3.2:3b \
         --serial <device> --timeout 90
 ```
+
+![img](./screenshots/2026-09-14_17-05.png)     
+
+![img](./screenshots/2026-09-14_17-06.png)     
+
+![img](./screenshots/2026-09-14_17-07.png)     
 
 On the Motorola every area then reaches a conclusion on real device evidence
 (`simulated: false`), overall score 0.93:
