@@ -73,6 +73,24 @@ PNG_DIMENSIONS = ((64, 64), (128, 64), (128, 128), (256, 64))
 PNG_PATTERNS = ("affine", "alternating", "zero")
 PDU_LENGTHS = (32, 128, 256, 512, 1024)
 PDU_PATTERNS = PNG_PATTERNS
+# --target rw: a controlled read/write primitive (see parser.c's
+# inspect_png_rw/inspect_png_rw_file) instead of the OOB-write crash.
+# read/write windows must stay inside this fixed companion buffer, matching
+# PURR_RW_COMPANION_SIZE in parser.c.
+RW_COMPANION_SIZE = 64
+RW_RECIPE_KEYS = {
+    "kind",
+    "width",
+    "height",
+    "channels",
+    "bit_depth",
+    "crc",
+    "rw_read_offset",
+    "rw_read_len",
+    "rw_write_offset",
+    "rw_write_len",
+    "rw_write_byte",
+}
 RECIPE_KEYS = {
     "kind",
     "width",
@@ -115,9 +133,21 @@ def pattern_bytes(length: int, pattern: str, seed: int) -> bytes:
 def build_png(recipe: Mapping[str, Any]) -> bytes:
     width = recipe["width"]
     height = recipe["height"]
-    actual = width * height * 4
-    payload = pattern_bytes(actual, recipe["pattern"], recipe["seed"])
     header = struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)
+    if "rw_read_offset" in recipe:
+        # pCAT carries a 5-byte R/W request instead of pixel-overflow bytes;
+        # see parser.c's purr_rw_request / parse_rw_request.
+        payload = struct.pack(
+            ">BBBBB",
+            recipe["rw_read_offset"],
+            recipe["rw_read_len"],
+            recipe["rw_write_offset"],
+            recipe["rw_write_len"],
+            recipe["rw_write_byte"],
+        )
+    else:
+        actual = width * height * 4
+        payload = pattern_bytes(actual, recipe["pattern"], recipe["seed"])
     data = (
         PNG_SIGNATURE
         + png_chunk(b"IHDR", header)
@@ -140,6 +170,8 @@ def build_pdu(recipe: Mapping[str, Any]) -> bytes:
 
 
 def expected_outcome(recipe: Mapping[str, Any]) -> str:
+    if "rw_read_offset" in recipe:
+        return "RW_PRIMITIVE"
     if recipe["kind"] == "png":
         actual = recipe["width"] * recipe["height"] * recipe["channels"]
         checked = actual & 0xFFFF
@@ -150,6 +182,20 @@ def expected_outcome(recipe: Mapping[str, Any]) -> str:
 
 def fallback_recipe(kind: str, target: str) -> dict[str, Any]:
     if kind == "png":
+        if target == "rw":
+            return {
+                "kind": "png",
+                "width": 8,
+                "height": 8,
+                "channels": 4,
+                "bit_depth": 8,
+                "crc": "valid",
+                "rw_read_offset": 0,
+                "rw_read_len": len(b"meow-meow MCTTP 2026\x00"),
+                "rw_write_offset": 0,
+                "rw_write_len": 4,
+                "rw_write_byte": 0x41,
+            }
         if target == "oob":
             return {
                 "kind": "png",
@@ -189,7 +235,50 @@ def _integer(value: Any, name: str) -> int:
     return value
 
 
+def validate_rw_recipe(candidate: Mapping[str, Any]) -> dict[str, Any]:
+    if not isinstance(candidate, Mapping):
+        raise RecipeError("model response must be a JSON object")
+    unknown = set(candidate) - RW_RECIPE_KEYS
+    if unknown:
+        raise RecipeError("unknown recipe fields: " + ", ".join(sorted(unknown)))
+
+    def field(name: str) -> int:
+        value = _integer(candidate.get(name), name)
+        if not 0 <= value <= 255:
+            raise RecipeError(f"{name} must be in range 0..255")
+        return value
+
+    read_offset = field("rw_read_offset")
+    read_len = field("rw_read_len")
+    write_offset = field("rw_write_offset")
+    write_len = field("rw_write_len")
+    write_byte = field("rw_write_byte")
+    if read_len == 0 or write_len == 0:
+        raise RecipeError("rw_read_len and rw_write_len must be at least 1")
+    if read_offset + read_len > RW_COMPANION_SIZE:
+        raise RecipeError(f"rw read window exceeds the {RW_COMPANION_SIZE}-byte companion buffer")
+    if write_offset + write_len > RW_COMPANION_SIZE:
+        raise RecipeError(f"rw write window exceeds the {RW_COMPANION_SIZE}-byte companion buffer")
+    return {
+        "kind": "png",
+        "width": 8,
+        "height": 8,
+        "channels": 4,
+        "bit_depth": 8,
+        "crc": "valid",
+        "rw_read_offset": read_offset,
+        "rw_read_len": read_len,
+        "rw_write_offset": write_offset,
+        "rw_write_len": write_len,
+        "rw_write_byte": write_byte,
+    }
+
+
 def validate_recipe(candidate: Mapping[str, Any], kind: str, target: str) -> dict[str, Any]:
+    if target == "rw":
+        if kind != "png":
+            raise RecipeError("target=rw is PNG-only")
+        return validate_rw_recipe(candidate)
     if not isinstance(candidate, Mapping):
         raise RecipeError("model response must be a JSON object")
     unknown = set(candidate) - RECIPE_KEYS
@@ -267,6 +356,27 @@ def parse_json_object(text: str) -> Mapping[str, Any]:
 
 
 def prompt_for(kind: str, target: str, profile: Mapping[str, Any], extra: str = "") -> str:
+    if target == "rw":
+        schema = (
+            '{"kind":"png","width":8,"height":8,"channels":4,"bit_depth":8,"crc":"valid",'
+            '"rw_read_offset":0,"rw_read_len":21,"rw_write_offset":0,"rw_write_len":4,'
+            '"rw_write_byte":65}'
+        )
+        return (
+            "You are a bounded test-case planner for the offline PurrView Android "
+            "memory-safety lab's read/write primitive demo. Return JSON only, matching "
+            f"this schema exactly: {schema} "
+            "width, height, channels, bit_depth and crc must be exactly as in the schema - "
+            "only the rw_* fields vary. rw_read_offset, rw_read_len, rw_write_offset, "
+            "rw_write_len and rw_write_byte are each an integer 0..255. "
+            f"rw_read_offset+rw_read_len and rw_write_offset+rw_write_len must each be at "
+            f"most {RW_COMPANION_SIZE} (PurrView's own companion buffer size). Pick values "
+            "that read, then overwrite, an interesting region of that buffer. "
+            "Do not output C, assembly, shellcode, ROP, syscalls, commands, URLs, file "
+            "paths, network actions, or executable content. "
+            f"Device profile (informational only): {json.dumps(profile, sort_keys=True)}"
+            f"{extra}"
+        )
     schema = (
         '{"kind":"png","width":128,"height":128,"channels":4,'
         '"bit_depth":8,"pattern":"affine","seed":3,"crc":"valid"}'
@@ -974,7 +1084,10 @@ def resolve_profile(args: argparse.Namespace, live: bool) -> Mapping[str, Any]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--kind", choices=("png", "pdu"), default="png")
-    parser.add_argument("--target", choices=("oob", "control", "any"), default="oob")
+    parser.add_argument("--target", choices=("oob", "control", "any", "rw"), default="oob",
+                         help="'rw' is PNG-only: a controlled read/write primitive into "
+                              "PurrView's own companion buffer instead of the OOB-write crash "
+                              "(see parser.c's inspect_png_rw/inspect_png_rw_file)")
     parser.add_argument("--remote-ssh", default=DEFAULT_REMOTE_SSH, help="SSH target (user@host) for the primary Ollama instance")
     parser.add_argument("--remote-bind-host", default=None, help="address Ollama is bound to on the remote host (default: derived from --remote-ssh)")
     parser.add_argument("--remote-port", type=int, default=DEFAULT_REMOTE_PORT, help="Ollama port on the remote host")
@@ -1018,6 +1131,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.adb_push and args.kind != "png":
         parser.error("--adb-push currently supports the PurrView PNG worker only")
+    if args.target == "rw" and args.kind != "png":
+        parser.error("--target rw is PNG-only (--kind png)")
     if args.sweep > 0:
         return run_sweep(args)
     if args.density > 0:
@@ -1044,17 +1159,17 @@ def main(argv: list[str] | None = None) -> int:
         model_used = None
 
     baseline_path = args.baseline
-    if baseline_path is None:
+    if baseline_path is None and args.target != "rw":
         default_baseline = ROOT / "app/src/main/assets" / ("purrview-oob.png" if args.kind == "png" else "purrview-pdu.bin")
         baseline_path = default_baseline if default_baseline.exists() else None
     baseline = baseline_path.read_bytes() if baseline_path and baseline_path.exists() else None
     data = build_png(recipe) if args.kind == "png" else build_pdu(recipe)
-    if baseline is not None and data == baseline:
+    if baseline is not None and data == baseline and args.target != "rw":
         recipe = validate_recipe(force_visible_variation(recipe, args.kind), args.kind, args.target)
         data = build_png(recipe) if args.kind == "png" else build_pdu(recipe)
         source += "+guarded-variation"
     extension = "png" if args.kind == "png" else "bin"
-    output = args.output or (DEFAULT_OUTPUT / f"purrview-ai.{extension}")
+    output = args.output or (DEFAULT_OUTPUT / (f"purrview-rw.{extension}" if args.target == "rw" else f"purrview-ai.{extension}"))
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_bytes(data)
     manifest = {
@@ -1072,12 +1187,13 @@ def main(argv: list[str] | None = None) -> int:
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(manifest, indent=2, sort_keys=True))
     if args.adb_push:
+        private_name = "purrview-rw.png" if args.target == "rw" else "purrview-ai.png"
         try:
-            push_to_device(output, args.serial, "purrview-ai.png")
+            push_to_device(output, args.serial, private_name)
         except (OSError, subprocess.CalledProcessError) as error:
             print(f"[ai_mutate] adb push failed: {error}", file=sys.stderr)
             return 3
-        print("ADB: copied to lab.purrview/files/purrview-ai.png")
+        print(f"ADB: copied to lab.purrview/files/{private_name}")
     return 0
 
 

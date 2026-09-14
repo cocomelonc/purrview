@@ -33,7 +33,12 @@ static int fail(char *out, size_t cap, const char *why) {
    the parser failed to check. */
 static const char kPurrLeakSecret[] = "meow-meow MCTTP 2026";
 
-int inspect_png(const uint8_t *d, size_t n, int fixed, char *out, size_t cap) {
+/* Shared envelope walk used by both inspect_png and inspect_png_rw: PNG
+   signature, chunk-by-chunk CRC/bounds checks, IHDR, and locating the
+   inert pCAT ancillary chunk PurrView's own fixtures carry. */
+static int parse_envelope(const uint8_t *d, size_t n, char *out, size_t cap, uint32_t *w_out,
+                           uint32_t *h_out, const uint8_t **purr_payload_out,
+                           size_t *purr_payload_len_out) {
   const uint8_t sig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
   if (n < 8 || n > 1048576 || memcmp(d, sig, 8))
     return fail(out, cap, "Invalid PNG signature or file size");
@@ -76,6 +81,18 @@ int inspect_png(const uint8_t *d, size_t n, int fixed, char *out, size_t cap) {
     pos += (size_t)len + 12;
   }
   if (!end || pos != n) return fail(out, cap, "Missing IEND or trailing bytes");
+  *w_out = w;
+  *h_out = h;
+  *purr_payload_out = purr_payload;
+  *purr_payload_len_out = purr_payload_len;
+  return 0;
+}
+
+int inspect_png(const uint8_t *d, size_t n, int fixed, char *out, size_t cap) {
+  uint32_t w, h;
+  const uint8_t *purr_payload;
+  size_t purr_payload_len;
+  if (parse_envelope(d, n, out, cap, &w, &h, &purr_payload, &purr_payload_len) != 0) return -1;
   uint64_t actual = (uint64_t)w * h * 4;
   /* The vulnerable path intentionally narrows the allocation size, then uses
      the full image size for a copy. It exists only in the PurrView worker. */
@@ -122,4 +139,180 @@ int inspect_png(const uint8_t *d, size_t n, int fixed, char *out, size_t cap) {
                  : bypass ? "Native validation defect reproduced in PurrView parser."
                           : "Parser completed.");
   return bypass ? 1 : accepted ? 0 : 2;
+}
+
+/* MCTTP 2026 R/W primitive demo: PurrView's own harness allocates a small,
+   fixed "companion" region right after a small, fixed allocation - the same
+   single-malloc-block trick as the OOB-read leak above, so this stays
+   PurrView's own construction, not heap grooming or cross-chunk corruption.
+   The pCAT chunk (already fully attacker-controlled, same as the OOB-write
+   payload above) is interpreted as a 5-byte request instead of raw pixel
+   bytes: [read_offset][read_len][write_offset][write_len][write_byte], each
+   one byte, read/write windows bounded to the companion buffer. Unlike
+   inspect_png's bypass path this never raises SIGABRT - the point is a
+   primitive that is actually usable, not a one-shot crash. */
+#define PURR_RW_COMPANION_SIZE 64u
+
+typedef struct {
+  uint8_t read_offset;
+  uint8_t read_len;
+  uint8_t write_offset;
+  uint8_t write_len;
+  uint8_t write_byte;
+} purr_rw_request;
+
+static int parse_rw_request(const uint8_t *body, size_t body_len, purr_rw_request *req) {
+  if (body_len != 5) return -1;
+  req->read_offset = body[0];
+  req->read_len = body[1];
+  req->write_offset = body[2];
+  req->write_len = body[3];
+  req->write_byte = body[4];
+  if (req->read_len == 0 || req->write_len == 0) return -1;
+  if ((size_t)req->read_offset + req->read_len > PURR_RW_COMPANION_SIZE) return -1;
+  if ((size_t)req->write_offset + req->write_len > PURR_RW_COMPANION_SIZE) return -1;
+  return 0;
+}
+
+static void hex_encode(const uint8_t *data, size_t len, char *out, size_t cap) {
+  static const char digits[] = "0123456789abcdef";
+  size_t max = (cap - 1) / 2;
+  if (len > max) len = max;
+  for (size_t i = 0; i < len; i++) {
+    out[i * 2] = digits[data[i] >> 4];
+    out[i * 2 + 1] = digits[data[i] & 0xF];
+  }
+  out[len * 2] = 0;
+}
+
+int inspect_png_rw(const uint8_t *d, size_t n, char *out, size_t cap) {
+  uint32_t w, h;
+  const uint8_t *purr_payload;
+  size_t purr_payload_len;
+  if (parse_envelope(d, n, out, cap, &w, &h, &purr_payload, &purr_payload_len) != 0) return -1;
+  (void)w;
+  (void)h;
+
+  purr_rw_request req;
+  if (purr_payload == NULL || parse_rw_request(purr_payload, purr_payload_len, &req) != 0)
+    return fail(out, cap, "pCAT must carry a valid 5-byte R/W request within the 64-byte "
+                           "companion buffer");
+
+  size_t allocation = 16;
+  uint8_t *buf = (uint8_t *)malloc(allocation + PURR_RW_COMPANION_SIZE);
+  if (buf == NULL) return fail(out, cap, "PurrView parser allocation failed");
+  memset(buf, 0, allocation);
+  uint8_t *companion = buf + allocation;
+  memcpy(companion, kPurrLeakSecret, sizeof(kPurrLeakSecret));
+  memset(companion + sizeof(kPurrLeakSecret), 0xAA,
+         PURR_RW_COMPANION_SIZE - sizeof(kPurrLeakSecret));
+
+  char before_hex[PURR_RW_COMPANION_SIZE * 2 + 1];
+  hex_encode(companion + req.read_offset, req.read_len, before_hex, sizeof(before_hex));
+  PNG_LOGE("RW READ | PurrView parser | offset=%u len=%u bytes=%s", req.read_offset,
+           req.read_len, before_hex);
+
+  memset(companion + req.write_offset, req.write_byte, req.write_len);
+  PNG_LOGE("RW WRITE | PurrView parser | offset=%u len=%u byte=0x%02x", req.write_offset,
+           req.write_len, req.write_byte);
+
+  char after_hex[PURR_RW_COMPANION_SIZE * 2 + 1];
+  hex_encode(companion + req.read_offset, req.read_len, after_hex, sizeof(after_hex));
+  PNG_LOGE("RW READBACK | PurrView parser | offset=%u len=%u bytes=%s", req.read_offset,
+           req.read_len, after_hex);
+
+  free(buf);
+  snprintf(out, cap,
+           "RW PRIMITIVE | PurrView parser\n"
+           "read  [off=%u len=%u] -> %s\n"
+           "write [off=%u len=%u byte=0x%02x]\n"
+           "read  [off=%u len=%u] -> %s (after write)",
+           req.read_offset, req.read_len, before_hex, req.write_offset, req.write_len,
+           req.write_byte, req.read_offset, req.read_len, after_hex);
+  return 0;
+}
+
+/* Same primitive and wire format as inspect_png_rw, but backed by a file
+   inside PurrView's own already-private files directory instead of heap
+   memory - persistent storage rather than a process about to exit. The
+   companion file is (re)created fresh on every call, same as the heap
+   version's fresh malloc, so the demo stays deterministic call to call. The
+   file name is fixed; files_dir (the app's own getFilesDir()) is the only
+   directory ever touched. */
+int inspect_png_rw_file(const uint8_t *d, size_t n, const char *files_dir, char *out,
+                         size_t cap) {
+  uint32_t w, h;
+  const uint8_t *purr_payload;
+  size_t purr_payload_len;
+  if (parse_envelope(d, n, out, cap, &w, &h, &purr_payload, &purr_payload_len) != 0) return -1;
+  (void)w;
+  (void)h;
+
+  purr_rw_request req;
+  if (purr_payload == NULL || parse_rw_request(purr_payload, purr_payload_len, &req) != 0)
+    return fail(out, cap, "pCAT must carry a valid 5-byte R/W request within the 64-byte "
+                           "companion buffer");
+
+  if (files_dir == NULL) return fail(out, cap, "PurrView parser missing files_dir");
+  char path[512];
+  int written = snprintf(path, sizeof(path), "%s/purrview-rw-companion.bin", files_dir);
+  if (written < 0 || (size_t)written >= sizeof(path))
+    return fail(out, cap, "PurrView parser files_dir path too long");
+
+  uint8_t companion[PURR_RW_COMPANION_SIZE];
+  memcpy(companion, kPurrLeakSecret, sizeof(kPurrLeakSecret));
+  memset(companion + sizeof(kPurrLeakSecret), 0xAA,
+         PURR_RW_COMPANION_SIZE - sizeof(kPurrLeakSecret));
+
+  FILE *fp = fopen(path, "wb");
+  if (fp == NULL) return fail(out, cap, "PurrView parser could not create companion file");
+  size_t wrote = fwrite(companion, 1, sizeof(companion), fp);
+  fclose(fp);
+  if (wrote != sizeof(companion))
+    return fail(out, cap, "PurrView parser companion file write failed");
+
+  fp = fopen(path, "r+b");
+  if (fp == NULL) return fail(out, cap, "PurrView parser could not open companion file");
+
+  uint8_t io_buf[PURR_RW_COMPANION_SIZE];
+  if (fseek(fp, req.read_offset, SEEK_SET) != 0 ||
+      fread(io_buf, 1, req.read_len, fp) != req.read_len) {
+    fclose(fp);
+    return fail(out, cap, "PurrView parser companion file read failed");
+  }
+  char before_hex[PURR_RW_COMPANION_SIZE * 2 + 1];
+  hex_encode(io_buf, req.read_len, before_hex, sizeof(before_hex));
+  PNG_LOGE("RW FILE READ | PurrView parser | path=%s offset=%u len=%u bytes=%s", path,
+           req.read_offset, req.read_len, before_hex);
+
+  memset(io_buf, req.write_byte, req.write_len);
+  if (fseek(fp, req.write_offset, SEEK_SET) != 0 ||
+      fwrite(io_buf, 1, req.write_len, fp) != req.write_len) {
+    fclose(fp);
+    return fail(out, cap, "PurrView parser companion file write failed");
+  }
+  fflush(fp);
+  PNG_LOGE("RW FILE WRITE | PurrView parser | path=%s offset=%u len=%u byte=0x%02x", path,
+           req.write_offset, req.write_len, req.write_byte);
+
+  if (fseek(fp, req.read_offset, SEEK_SET) != 0 ||
+      fread(io_buf, 1, req.read_len, fp) != req.read_len) {
+    fclose(fp);
+    return fail(out, cap, "PurrView parser companion file readback failed");
+  }
+  fclose(fp);
+  char after_hex[PURR_RW_COMPANION_SIZE * 2 + 1];
+  hex_encode(io_buf, req.read_len, after_hex, sizeof(after_hex));
+  PNG_LOGE("RW FILE READBACK | PurrView parser | path=%s offset=%u len=%u bytes=%s", path,
+           req.read_offset, req.read_len, after_hex);
+
+  snprintf(out, cap,
+           "RW PRIMITIVE (file) | PurrView parser\n"
+           "path  %s\n"
+           "read  [off=%u len=%u] -> %s\n"
+           "write [off=%u len=%u byte=0x%02x]\n"
+           "read  [off=%u len=%u] -> %s (after write)",
+           path, req.read_offset, req.read_len, before_hex, req.write_offset, req.write_len,
+           req.write_byte, req.read_offset, req.read_len, after_hex);
+  return 0;
 }

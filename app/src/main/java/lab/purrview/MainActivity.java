@@ -183,6 +183,9 @@ public final class MainActivity extends Activity {
         button(pngButtons, "Run fixed", v -> startPngWorker(true));
         button(pngButtons, "Run PoC", v -> startPngWorker(false));
         button(pngButtons, "Run AI PoC", v -> startAiPngWorker());
+        LinearLayout pngRwButtons = buttonRow(page);
+        button(pngRwButtons, "R/W PoC (memory)", v -> startRwPngWorker("memory"));
+        button(pngRwButtons, "R/W PoC (file)", v -> startRwPngWorker("file"));
     }
 
     /** WebP · libwebp 1.3.1 section. */
@@ -259,6 +262,15 @@ public final class MainActivity extends Activity {
             if (privateFile != null) request.putExtra(PngDecodeService.EXTRA_PRIVATE_FILE, privateFile);
             return request;
         });
+    }
+
+    private void startRwPngWorker(String target) {
+        launchWorker(PngDecodeService.ACTION_RESULT, "STARTING | PNG parser | R/W PoC (" + target + ")", () ->
+                new Intent(this, PngDecodeService.class)
+                        .setAction(PngDecodeService.ACTION_START)
+                        .putExtra(PngDecodeService.EXTRA_RW, true)
+                        .putExtra(PngDecodeService.EXTRA_RW_TARGET, target)
+                        .putExtra(PngDecodeService.EXTRA_PRIVATE_FILE, "purrview-rw.png"));
     }
 
     private void startWorker(Class<?> service, String action, String asset, String name) {

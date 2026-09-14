@@ -64,6 +64,100 @@ the isolated `:png_decoder` process aborted:
 
 ![img](./screenshots/2026-09-14_11-00.png)
 
+### read/write primitive: memory and file
+
+The OOB-read leak above discloses one fixed secret at one fixed offset.
+`parser.c`'s `inspect_png_rw` (and its file-backed twin,
+`inspect_png_rw_file`) turn that into a genuine, controlled **read/write
+primitive**: the offset, length and value are no longer fixed - they come
+from the same `pCAT` chunk that already carried attacker-controlled bytes
+for the OOB write, now read as a 5-byte request
+(`read_offset`/`read_len`/`write_offset`/`write_len`/`write_byte`) into a
+small, fixed 64-byte "companion" buffer PurrView allocates right next to a
+tiny 16-byte declared allocation - the same single-malloc-block trick as
+the leak, so this stays PurrView's own construction, not heap grooming or
+cross-chunk corruption. Unlike the OOB write demo, this path never raises
+`SIGABRT`: the point is a primitive that is actually usable, not a one-shot
+crash. Two backends share the exact same request format and the exact same
+recipe:
+
+- **memory** (`inspect_png_rw`) - the companion buffer is fresh heap memory,
+  gone the moment the worker process exits.
+- **file** (`inspect_png_rw_file`) - the companion buffer is a file inside
+  PurrView's own already-private `files/` directory, so the write survives
+  past the worker process - the same bug chain reaching persistent storage.
+
+`tools/ai_mutate.py --target rw` (PNG-only) builds the fixture: bounded
+`rw_read_offset`/`rw_read_len`/`rw_write_offset`/`rw_write_len`/`rw_write_byte`
+fields, each `0..255`, each window bounded to the 64-byte companion buffer,
+chosen by Ollama (or the deterministic fallback with `--offline`) exactly
+like every other recipe in this lab.
+
+Step by step, memory primitive:
+
+```bash
+cd ~/research/purrview
+python3 tools/ai_mutate.py --offline --kind png --target rw --adb-push --serial ZY22K5H4KQ
+adb shell am start -n lab.purrview/.MainActivity
+adb logcat -c
+```
+
+Tap **R/W PoC (memory)** on screen, then read the result back:
+
+```bash
+adb logcat -d -v brief -s "PurrView/PNG:I" "PurrView/PNG:E" "*:S"
+```
+
+```
+E/PurrView/PNG(16875): RW READ | PurrView parser | offset=0 len=21 bytes=6d656f772d6d656f77204d43545450203230323600
+E/PurrView/PNG(16875): RW WRITE | PurrView parser | offset=0 len=4 byte=0x41
+E/PurrView/PNG(16875): RW READBACK | PurrView parser | offset=0 len=21 bytes=414141412d6d656f77204d43545450203230323600
+```
+
+Decoding the hex: the first read is `meow-meow MCTTP 2026\0` - the same
+secret as the leak demo, but now reached through an attacker-chosen offset
+instead of a fixed one. The write places `AAAA` (`0x41` x4) at offset 0, and
+the read-back proves it landed exactly there: `AAAA-meow MCTTP 2026\0`.
+
+Step by step, file primitive - same fixture, same recipe, the other button:
+
+```bash
+adb logcat -c
+```
+
+Tap **R/W PoC (file)** on screen:
+
+```bash
+adb logcat -d -v brief -s "PurrView/PNG:I" "PurrView/PNG:E" "*:S"
+```
+
+```
+E/PurrView/PNG(16875): RW FILE READ | PurrView parser | path=/data/user/0/lab.purrview/files/purrview-rw-companion.bin offset=0 len=21 bytes=6d656f772d6d656f77204d43545450203230323600
+E/PurrView/PNG(16875): RW FILE WRITE | PurrView parser | path=/data/user/0/lab.purrview/files/purrview-rw-companion.bin offset=0 len=4 byte=0x41
+E/PurrView/PNG(16875): RW FILE READBACK | PurrView parser | path=/data/user/0/lab.purrview/files/purrview-rw-companion.bin offset=0 len=21 bytes=414141412d6d656f77204d43545450203230323600
+```
+
+Identical read/write/read-back to the memory version - the difference is
+that this write outlives the worker process. Prove it from outside the
+parser entirely, with the same confined `run-as` shell from the full-chain
+section above, reading the file no logcat line is required for:
+
+```bash
+adb shell 'run-as lab.purrview sh -c "ls -la files/; xxd files/purrview-rw-companion.bin 2>/dev/null || od -An -tx1 files/purrview-rw-companion.bin"'
+```
+
+```
+-rw------- 1 u0_a244 u0_a244    64 2026-09-14 11:31 purrview-rw-companion.bin
+00000000: 4141 4141 2d6d 656f 7720 4d43 5454 5020  AAAA-meow MCTTP 
+00000010: 3230 3236 00aa aaaa aaaa aaaa aaaa aaaa  2026............
+00000020: aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa  ................
+00000030: aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa  ................
+```
+
+The `AAAA` the write placed is sitting on disk, in PurrView's own sandbox,
+padded with the deterministic `0xAA` filler that marks "never written by
+this demo" - proof the write is real and persistent, not just a log line.
+
 ### WebP control and historical fixture
 
 The APK vendors libwebp 1.3.1 and calls its real `WebPGetFeatures` and
@@ -397,6 +491,68 @@ adb logcat -d -v brief -s ReconCat:I "*:S"
 
 ![img](./screenshots/2026-09-14_09-04.png)
 
+### the full chain, and where the demo stops
+
+Everything above composes into one command:
+
+```bash
+adb shell am start -n lab.purrview/.MainActivity
+python3 tools/ai_mutate.py --sweep 1 --offline --sweep-target oob --serial ZY22K5H4KQ
+```
+
+```
+[ai_mutate] profile: live recon from ReconCat (ZY22K5H4KQ)
+...001.png: 1 file pushed, 0 skipped.
+[sweep 1/1] !! deterministic-fallback ... recipe={"height": 128, "width": 128, ...} -> OOB_WRITE
+             E/PurrView/PNG(15865): OOB WRITE | PurrView parser | allocation=1 copy=65536 source=65536
+             tally: CONTROL=0 OOB_WRITE=1 REJECTED=0 TIMEOUT=0
+```
+
+ReconCat is triggered first for a live `--profile`; a bounded recipe is
+chosen (Ollama, or the deterministic fallback with `--offline`); the
+deterministic builder emits an inert PNG; it is pushed into PurrView's own
+already-private `files/purrview-ai.png` (`adb push` + `run-as ... cp` -
+`push_to_device`); `AiSweepReceiver` starts the same `Run AI PoC` path;
+`PngDecodeService` takes the OOB write and aborts, classified live from
+logcat. Nothing here is simulated or scored in a host harness.
+
+The closing beat: reuse the exact same `run-as` primitive that pushed the
+fixture, but as a plain interactive-ish shell, scoped only to PurrView's own
+app UID, to show live that the fixture which just crashed the parser landed
+nowhere but PurrView's own sandbox:
+
+```bash
+adb shell 'run-as lab.purrview sh -c "pwd; ls -la files/"'
+```
+
+```
+/data/user/0/lab.purrview
+-rw-rw-rw- 1 u0_a244 u0_a244 65613 2026-09-14 11:18 purrview-ai.png
+```
+
+`sha256sum files/purrview-ai.png` inside that shell matches the manifest
+`ai_mutate.py` wrote on the laptop, byte for byte - proof that what the
+model chose is exactly what landed on the phone, not a claim taken on
+faith. The same shell can write there too (it is PurrView's own `files/`
+directory, after all) but cannot read anywhere else on the device, not even
+ReconCat's sandbox next to it:
+
+```bash
+adb shell 'run-as lab.purrview cat /data/data/lab.reconcat/files/recon.json'   # Permission denied
+adb shell 'run-as lab.purrview cat /data/system/packages.list'                 # Permission denied
+```
+
+`run-as` is not root and not a jailbreak - it is a standard adb debug-build
+feature that execs a shell as the app's own UID (`u0_a244(u0_a244)` here,
+never `root`), the same per-UID sandbox Android already enforces against
+PurrView itself, whether the caller is JNI code or a human at a shell
+prompt. There is nowhere further to go from here: the model picked a
+bounded recipe, the laptop built it deterministically, it never touched
+anything but PurrView's own already-private storage, and it crashed exactly
+the one worker it was aimed at. That is the natural place to end the talk -
+PurrView never had unconstrained code execution to begin with, and neither
+does this shell.
+
 #### From a single exact slice to a full 2-D search
 
 `--sweep` does not hold $`W`$ fixed the way `--density` below does. PurrView's own IHDR check rejects anything that is not 8-bit-depth RGBA, so for any recipe the parser is willing to accept at all, the branch it takes is - just as in the density model - a pure function of the pair $`(W,H)`$ through the same truncation:
@@ -656,7 +812,7 @@ logging has a stderr fallback so those tests remain portable.
 - `app/src/main/java/lab/purrview/SmsDecodeService.java` - isolated local PDU worker.
 - `app/src/main/java/lab/purrview/WebpDecodeService.java` - libwebp worker.
 - `app/src/main/java/lab/purrview/JpegDecodeService.java` - libjpeg-turbo worker.
-- `app/src/main/cpp/parser.c` - PNG envelope checks and PurrView OOB/fixed paths; the `BUDGET BYPASS` path also demonstrates a bounded OOB-read leak of a fixed secret placed next to the narrow allocation.
+- `app/src/main/cpp/parser.c` - PNG envelope checks and PurrView OOB/fixed paths; the `BUDGET BYPASS` path also demonstrates a bounded OOB-read leak of a fixed secret placed next to the narrow allocation; `inspect_png_rw`/`inspect_png_rw_file` are the non-crashing, attacker-offset-controlled read/write primitive (heap and file-backed), driven by `--target rw`.
 - `app/src/main/cpp/sms_parser.c` - local PDU parser and OOB/fixed paths.
 - `app/src/main/cpp/bridge.c` - self-ASLR `dladdr` JNI bridge.
 - `app/src/main/cpp/png_jni.c`, `sms_jni.c` - bounded JNI entry points.

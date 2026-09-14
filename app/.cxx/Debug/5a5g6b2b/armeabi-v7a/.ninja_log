@@ -179,3 +179,7 @@
 31	54	1789276379747791297	/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/armeabi-v7a/libpurrview.so	baddfc861144684f
 2	38	1789356048821139474	CMakeFiles/purrview.dir/parser.c.o	766191412a6774e6
 38	62	1789356048847806141	/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/armeabi-v7a/libpurrview.so	baddfc861144684f
+2	17	1789367154217851095	CMakeFiles/purrview.dir/png_jni.c.o	57d89f536fcc6034
+1	26	1789367154224517762	CMakeFiles/purrview.dir/bridge.c.o	51e4151be2a246ed
+1	29	1789367154227851095	CMakeFiles/purrview.dir/parser.c.o	766191412a6774e6
+29	55	1789367154254517762	/home/cocomelonc/research/purrview/app/build/intermediates/cxx/Debug/5a5g6b2b/obj/armeabi-v7a/libpurrview.so	baddfc861144684f
